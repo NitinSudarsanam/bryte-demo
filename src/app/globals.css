@@ -70,6 +70,10 @@ p {
 	font-size: 15px;
   font-family: 'League Spartan';
 }
+.JoinUsButton:hover {
+	background-color: #e4ce79;
+}
+
 
 .NavigationMenuTrigger,
 .NavigationMenuLink {
