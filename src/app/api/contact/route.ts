@@ -16,19 +16,24 @@ export async function POST(req: Request) {
     // Initialize Cosmic client
     const cosmic = createBucketClient({
       bucketSlug: process.env.COSMIC_BUCKET_SLUG!,
-      writeKey: process.env.COSMIC_WRITE_KEY!,
       readKey: process.env.COSMIC_READ_KEY!,
+      writeKey: process.env.COSMIC_WRITE_KEY!,
     })
 
 
+    // Generate a unique slug for the contact submission
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+    const slug = `inquiry-from-${name.toLowerCase().replace(/\s+/g, '-')}-${timestamp}`
+    
     await cosmic.objects.insertOne({
       type: "contact-submissions",
+      slug: slug,
       title: `Contact from ${name}`,
       metadata: {
         name,
         email,
         message,
-        submitted_at: "2024-01-16",
+        submission_date: new Date().toISOString().split('T')[0], // Format: YYYY-MM-DD
       },
     })
 
