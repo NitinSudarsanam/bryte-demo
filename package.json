@@ -9,7 +9,12 @@
   },
   "dependencies": {
     "@cosmicjs/sdk": "^1.5.6",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-form": "^0.1.8",
+    "@radix-ui/react-toast": "^1.2.15",
+    "@types/nodemailer": "^7.0.3",
     "next": "^15.5.4",
+    "nodemailer": "^7.0.10",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
