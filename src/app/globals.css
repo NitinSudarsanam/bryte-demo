@@ -1,5 +1,6 @@
 
 @import "tailwindcss";
+/* 
 @import "@radix-ui/colors/black-alpha.css";
 @import "@radix-ui/colors/indigo.css";
 @import "@radix-ui/colors/mauve.css";
@@ -29,6 +30,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+} */
 }
 
 /* reset */
