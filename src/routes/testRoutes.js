@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { getObjects } = require('../cosmic');
+const bucket = require('../api/cosmicClient');
 
 router.get('/test', async (req, res) => {
-  const objects = await getObjects('Posts'); // replace 'posts' with your object type
-  res.json(objects);
+  try {
+    const { objects } = await bucket.objects.find({ type: 'image' });
+    res.json(objects);
+  } catch (err) {
+    console.error('Error fetching koala:', err.message);
+    res.status(500).json({ error: 'Failed to fetch pages' });
+  }
 });
 
 module.exports = router;
