@@ -2,7 +2,7 @@
 import * as React from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import classNames from "classnames";
-import { TriangleDownIcon } from "@radix-ui/react-icons";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 import "./accordion.css";
 
 // Type definitions
@@ -79,7 +79,7 @@ const AccordionTrigger = React.forwardRef<
       ref={forwardedRef}
     >
       {children}
-      <TriangleDownIcon className="AccordionTriangle" aria-hidden />
+      <ChevronDownIcon className="AccordionChevron" aria-hidden />
     </Accordion.Trigger>
   </Accordion.Header>
 ));
