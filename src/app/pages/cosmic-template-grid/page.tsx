@@ -1,8 +1,8 @@
-import CosmicTemplate from '../../components/CosmicTemplate'
+import CosmicTemplateGrid from '../../components/CosmicTemplateGrid'
 
-export default function CosmicTemplatePage() {
+export default function CosmicTemplateGridPage() {
   return (
-    <CosmicTemplate
+    <CosmicTemplateGrid
       bucketSlug="basic-template-production"
       readKey="38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f"
       type="pages"

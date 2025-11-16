@@ -1,12 +1,12 @@
-import CosmicTemplate from '../../components/CosmicTemplate'
+import CosmicTemplateCard from '../../components/CosmicTemplateCard'
 
-export default function CosmicTemplatePage() {
+export default function CosmicTemplateCardPage() {
   return (
-    <CosmicTemplate
+    <CosmicTemplateCard
       bucketSlug="basic-template-production"
       readKey="38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f"
       type="pages"
-      slug="home-page"
+      slug="about-us"
       props="slug,title,metadata,type"
       depth={1}
     />

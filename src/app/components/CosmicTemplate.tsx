@@ -114,13 +114,45 @@ export default async function CosmicTemplate({
 
     const object: CosmicObject = data.object
 
+    // Create image lookup map
+    const imagesMap = new Map<string, any>()
+    if (object.metadata?.images && Array.isArray(object.metadata.images)) {
+      object.metadata.images.forEach((img: any) => {
+        if (img.id && img.metadata?.image) {
+          imagesMap.set(img.id, img.metadata.image)
+        }
+      })
+    }
+
+    // Get image - handles both ID string and full object
+    const getImage = (imageRef: string | any | null | undefined) => {
+      if (!imageRef) return null
+      
+      // If it's a string (ID), look it up in the map
+      if (typeof imageRef === 'string') {
+        return imagesMap.get(imageRef) || null
+      }
+      
+      // If it's an object with metadata.image (full object from depth=1)
+      if (typeof imageRef === 'object' && imageRef.metadata?.image) {
+        return imageRef.metadata.image
+      }
+      
+      // If it's already the image data object
+      if (typeof imageRef === 'object' && (imageRef.url || imageRef.imgix_url)) {
+        return imageRef
+      }
+      
+      return null
+    }
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <header className="mb-10 text-center">
             <h1 className="text-5xl font-bold text-gray-900 mb-4 tracking-tight">
-              {object.title}
+              {object.metadata?.title || object.title}
             </h1>
             <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
               <span className="px-3 py-1 bg-gray-200 rounded-full">
@@ -134,36 +166,112 @@ export default async function CosmicTemplate({
 
           {/* Main Content */}
           <main className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            {/* Metadata Section */}
-            {object.metadata && Object.keys(object.metadata).length > 0 && (
-              <section className="p-8">
-                <h2 className="text-3xl font-semibold text-gray-800 mb-6 pb-3 border-b-2 border-gray-200">
-                  Content
-                </h2>
-                <div className="space-y-6">
-                  {Object.entries(object.metadata).map(([key, value]) => {
-                    const isImage = isImageObject(value)
-                    const isArrayOfImages = Array.isArray(value) && value.some(isImageObject)
+            <section className="p-8">
+              {/* Page Title from metadata */}
+              {object.metadata?.title && object.metadata.title !== object.title && (
+                <div className="mb-8 text-center">
+                  <h2 className="text-4xl font-semibold text-gray-800">
+                    {object.metadata.title}
+                  </h2>
+                </div>
+              )}
+
+              {/* Sections */}
+              {object.metadata?.sections && Array.isArray(object.metadata.sections) && object.metadata.sections.length > 0 && (
+                <div className="space-y-12">
+                  {object.metadata.sections.map((section: any, index: number) => {
+                    const sectionImage = getImage(section.metadata?.image)
                     
                     return (
-                      <div
-                        key={key}
-                        className={`pb-6 ${
-                          !isImage && !isArrayOfImages ? 'border-b border-gray-200' : ''
-                        }`}
-                      >
-                        <div className="font-semibold text-lg text-gray-800 capitalize mb-2">
-                          {key.replace(/_/g, ' ')}
-                        </div>
-                        <div className="text-gray-700">
-                          {renderMetadataValue(value)}
-                        </div>
+                      <div key={section.id || index} className="border-b border-gray-200 last:border-b-0 pb-12 last:pb-0">
+                        <h2 className="text-3xl font-semibold text-gray-800 mb-4">
+                          {section.metadata?.header || section.title}
+                        </h2>
+                        
+                        {sectionImage && (
+                          <div className="mb-6">
+                            <Image
+                              src={sectionImage.imgix_url || sectionImage.url}
+                              alt={section.metadata?.header || 'Section image'}
+                              width={800}
+                              height={600}
+                              className="rounded-lg shadow-md w-full h-auto"
+                              unoptimized
+                            />
+                          </div>
+                        )}
+                        
+                        {section.metadata?.body_text && (
+                          <div 
+                            className="prose prose-lg max-w-none text-gray-700"
+                            dangerouslySetInnerHTML={{ __html: section.metadata.body_text }}
+                          />
+                        )}
                       </div>
                     )
                   })}
                 </div>
-              </section>
-            )}
+              )}
+
+              {/* Display images if sections are empty or don't exist */}
+              {(!object.metadata?.sections || (Array.isArray(object.metadata.sections) && object.metadata.sections.length === 0)) && 
+               object.metadata?.images && Array.isArray(object.metadata.images) && object.metadata.images.length > 0 && (
+                <div className="space-y-6">
+                  {object.metadata.images.map((img: any, index: number) => {
+                    const imageData = img.metadata?.image
+                    if (!imageData) return null
+                    
+                    return (
+                      <div key={img.id || index} className="mb-6">
+                        {img.title && img.title !== 'image' && (
+                          <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+                            {img.title}
+                          </h3>
+                        )}
+                        <Image
+                          src={imageData.imgix_url || imageData.url}
+                          alt={img.title || img.slug || 'Image'}
+                          width={800}
+                          height={600}
+                          className="rounded-lg shadow-md w-full h-auto"
+                          unoptimized
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+
+              {/* Fallback: If no sections and no images, show other metadata */}
+              {(!object.metadata?.sections || (Array.isArray(object.metadata.sections) && object.metadata.sections.length === 0)) &&
+               (!object.metadata?.images || !Array.isArray(object.metadata.images) || object.metadata.images.length === 0) &&
+               object.metadata && Object.keys(object.metadata).length > 0 && (
+                <div className="space-y-6">
+                  {Object.entries(object.metadata)
+                    .filter(([key]) => key !== 'sections' && key !== 'images' && key !== 'title')
+                    .map(([key, value]) => {
+                      const isImage = isImageObject(value)
+                      const isArrayOfImages = Array.isArray(value) && value.some(isImageObject)
+                      
+                      return (
+                        <div
+                          key={key}
+                          className={`pb-6 ${
+                            !isImage && !isArrayOfImages ? 'border-b border-gray-200' : ''
+                          }`}
+                        >
+                          <div className="font-semibold text-lg text-gray-800 capitalize mb-2">
+                            {key.replace(/_/g, ' ')}
+                          </div>
+                          <div className="text-gray-700">
+                            {renderMetadataValue(value)}
+                          </div>
+                        </div>
+                      )
+                    })}
+                </div>
+              )}
+            </section>
 
             {/* Raw Data Section (for debugging) */}
             <details className="border-t border-gray-200 bg-gray-50">
