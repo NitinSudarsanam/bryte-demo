@@ -4,13 +4,13 @@ h3 {
   all: unset;
 }
 
-.faqs-container {
+.accordion-container {
   background-color: #fefae1;
   align-items: center;
   font-family: "League Spartan", sans-serif;
 }
 
-.faqs-title {
+.accordion-title {
   color: #22300d;
   font-size: 75px;
   text-align: center;

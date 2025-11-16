@@ -1,14 +1,25 @@
-import CosmicTemplate from './components/CosmicTemplate';
+import * as React from "react";
+import { NavigationMenu, DropdownMenu } from "radix-ui";
+import classNames from "classnames";
+import { Flex, Button, Theme } from '@radix-ui/themes';
+import { CaretDownIcon } from "@radix-ui/react-icons";
+import "./globals.css";
+import Header from '@/app/components/header';
+import Slideshow from "@/app/components/slideshow";
 
-export default function Home() {
+const slides = [
+  { id: "1", image: "/slide1.png", caption: "Lorem impsum dolor sit amet" },
+  { id: "2", image: "/slide2.png", caption: "Lorem impsum dolor sit amet" },
+];
+
+export default function HomePage() {
   return (
-    <CosmicTemplate
-      bucketSlug="basic-template-production"
-      readKey="38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f"
-      type="pages"
-      slug="home-page"
-      props="slug,title,metadata,type"
-      depth={1}
-    />
-  );
+      <div>
+        <Header/>
+        <Slideshow
+          slides={slides}
+        />
+      </div>
+    
+    );
 }
