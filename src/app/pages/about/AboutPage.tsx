@@ -27,10 +27,15 @@ interface ValuesSectionData {
   metadata?: {
     header?: string;
     body_text?: string;
-    image?: {
-      imgix_url?: string;
-      url?: string;
-    };
+    images?: Array<{
+      metadata?: {
+        image?: {
+          imgix_url?: string;
+          url?: string;
+        };
+      };
+      title?: string;
+    }>;
   };
 }
 
@@ -155,13 +160,17 @@ export default function AboutPage({ cosmic, valuesSection }: AboutPageProps) {
               }}
             />
           }
-          image={{
-            src:
-              valuesSection.metadata.image?.imgix_url ||
-              valuesSection.metadata.image?.url ||
-              "",
-            alt: valuesSection.metadata.header || "Our Values",
-          }}
+          image={
+            valuesSection.metadata.images?.[0]?.metadata?.image
+              ? {
+                  src:
+                    valuesSection.metadata.images[0].metadata.image.imgix_url ||
+                    valuesSection.metadata.images[0].metadata.image.url ||
+                    "",
+                  alt: valuesSection.metadata.images[0].title || valuesSection.metadata.header || "Our Values",
+                }
+              : undefined
+          }
           imagePosition="right"
           sectionBackgroundColor="var(--darkgreen)"
           sectionTextColor="#fff"
