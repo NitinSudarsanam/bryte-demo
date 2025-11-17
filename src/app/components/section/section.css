@@ -1,0 +1,85 @@
+/* Base section styles */
+.section {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 3rem;
+  border-radius: 2rem;
+  background-color: #22300d;
+  color: #fff;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: "League Spartan", sans-serif;
+}
+
+/* Text content section */
+.section__text-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.section__title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0 0 1.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.section__body {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  opacity: 0.95;
+}
+
+/* Image container */
+.section__image-container {
+  flex-shrink: 0;
+  width: 320px;
+  height: 320px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.section__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Image position variants */
+.section--image-left {
+  flex-direction: row-reverse;
+}
+
+.section--image-right {
+  flex-direction: row;
+}
+
+/* Without image - full width text */
+.section:not(.section--with-image) .section__text-content {
+  max-width: 100%;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .section {
+    flex-direction: column !important;
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+
+  .section__title {
+    font-size: 2rem;
+  }
+
+  .section__body {
+    font-size: 1rem;
+  }
+
+  .section__image-container {
+    width: 100%;
+    height: 240px;
+  }
+}
