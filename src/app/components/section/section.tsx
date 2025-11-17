@@ -49,7 +49,7 @@ const Section: React.FC<SectionProps> = ({
         <div className="section__body">{content}</div>
       </div>
 
-      {image && (
+      {image && image.src && (
         <div className="section__image-container">
           <img src={image.src} alt={image.alt} className="section__image" />
         </div>

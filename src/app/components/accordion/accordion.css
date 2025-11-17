@@ -8,7 +8,7 @@ h3 {
   background-color: #fefae1;
   align-items: center;
   font-family: "League Spartan", Arial, sans-serif;
-  min-height: 100vh;
+  padding: 40px 0;
 }
 
 .accordion-title {
