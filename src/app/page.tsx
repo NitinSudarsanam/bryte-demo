@@ -23,4 +23,12 @@ export default function HomePage() {
       <Slideshow slides={slides} />
     </div>
   );
+      <div>
+        <Header/>
+        <Slideshow
+          slides={slides}
+        />
+      </div>
+    
+    );
 }
