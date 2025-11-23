@@ -17,18 +17,8 @@ export default function HomePage() {
   return (
     <div>
       <Header />
-
       <Masthead />
-
       <Slideshow slides={slides} />
     </div>
   );
-      <div>
-        <Header/>
-        <Slideshow
-          slides={slides}
-        />
-      </div>
-    
-    );
 }
