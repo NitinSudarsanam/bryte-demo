@@ -1,7 +1,6 @@
 "use client";
 
 import AccordionComponent from "@/app/components/accordion";
-import Section from "@/app/components/section/section";
 import Header from "@/app/components/header";
 
 interface CosmicSection {
@@ -23,28 +22,12 @@ interface CosmicData {
   };
 }
 
-interface ValuesSectionData {
-  metadata?: {
-    header?: string;
-    body_text?: string;
-    images?: Array<{
-      metadata?: {
-        image?: {
-          imgix_url?: string;
-          url?: string;
-        };
-      };
-      title?: string;
-    }>;
-  };
-}
-
 interface AboutPageProps {
   cosmic: CosmicData | null;
-  valuesSection: ValuesSectionData | null;
+  valuesSection: null;
 }
 
-export default function AboutPage({ cosmic, valuesSection }: AboutPageProps) {
+export default function AboutPage({ cosmic }: AboutPageProps) {
   // Fallback content if Cosmic data is not available
   const fallbackItems = [
     {
@@ -119,13 +102,8 @@ export default function AboutPage({ cosmic, valuesSection }: AboutPageProps) {
   // Map Cosmic sections → your accordion format (or use fallback)
   const sections = cosmic?.metadata?.sections || [];
   
-  // Filter out the "why bryte" section from accordion items since it will be displayed separately
-  const accordionSections = sections.filter(
-    (section) => section.slug !== "about-us-why-bryte"
-  );
-  
-  const aboutItems = accordionSections.length > 0
-    ? accordionSections.map((section, index) => ({
+  const aboutItems = sections.length > 0
+    ? sections.map((section, index) => ({
         id: section.id || `item-${index + 1}`,
         title: section.metadata?.header || "",
         content: (
@@ -149,33 +127,6 @@ export default function AboutPage({ cosmic, valuesSection }: AboutPageProps) {
         title={cosmic?.metadata?.title || "About Bryte!"}
         items={aboutItems}
       />
-
-      {valuesSection?.metadata && (
-        <Section
-          title={valuesSection.metadata.header || "Why BRYTE?"}
-          content={
-            <div
-              dangerouslySetInnerHTML={{
-                __html: valuesSection.metadata.body_text || "",
-              }}
-            />
-          }
-          image={
-            valuesSection.metadata.images?.[0]?.metadata?.image
-              ? {
-                  src:
-                    valuesSection.metadata.images[0].metadata.image.imgix_url ||
-                    valuesSection.metadata.images[0].metadata.image.url ||
-                    "",
-                  alt: valuesSection.metadata.images[0].title || valuesSection.metadata.header || "Our Values",
-                }
-              : undefined
-          }
-          imagePosition="right"
-          sectionBackgroundColor="var(--darkgreen)"
-          sectionTextColor="#fff"
-        />
-      )}
     </>
   );
 }

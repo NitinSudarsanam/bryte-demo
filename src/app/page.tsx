@@ -1,24 +1,24 @@
-import * as React from "react";
-import { NavigationMenu, DropdownMenu } from "radix-ui";
-import classNames from "classnames";
-import { Flex, Button, Theme } from "@radix-ui/themes";
-import { CaretDownIcon } from "@radix-ui/react-icons";
-import "./globals.css";
-import Masthead from "@/app/components/masthead/masthead";
-import Header from "@/app/components/header";
-import Slideshow from "@/app/components/slideshow";
+import { fetchCosmicObject } from "@/app/lib/cosmic";
+import HomePageClient from "./HomePageClient";
 
-const slides = [
-  { id: "1", image: "/slide1.png", caption: "Lorem impsum dolor sit amet" },
-  { id: "2", image: "/slide2.png", caption: "Lorem impsum dolor sit amet" },
-];
+export default async function HomePage() {
+  // Fetch "about us - our values" section from Cosmic (the why bryte section)
+  let valuesSection;
+  try {
+    valuesSection = await fetchCosmicObject({
+      bucketSlug: "basic-template-production",
+      readKey: "38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f",
+      type: "sections",
+      slug: "about-us-why-bryte",
+      props: "slug,title,metadata",
+      depth: 1,
+    });
+    console.log("Cosmic values section:", JSON.stringify(valuesSection, null, 2));
+  } catch (error) {
+    console.error("Error fetching values section:", error);
+    // If the section doesn't exist, use fallback data
+    valuesSection = null;
+  }
 
-export default function HomePage() {
-  return (
-    <div>
-      <Header />
-      <Masthead />
-      <Slideshow slides={slides} />
-    </div>
-  );
+  return <HomePageClient valuesSection={valuesSection} />;
 }
