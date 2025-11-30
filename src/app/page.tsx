@@ -2,23 +2,23 @@ import { fetchCosmicObject } from "@/app/lib/cosmic";
 import HomePageClient from "./HomePageClient";
 
 export default async function HomePage() {
-  // Fetch "about us - our values" section from Cosmic (the why bryte section)
-  let valuesSection;
+  // Fetch "home-page" page object from Cosmic
+  let cosmic;
   try {
-    valuesSection = await fetchCosmicObject({
+    cosmic = await fetchCosmicObject({
       bucketSlug: "basic-template-production",
       readKey: "38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f",
-      type: "sections",
-      slug: "about-us-why-bryte",
-      props: "slug,title,metadata",
-      depth: 1,
+      type: "pages",
+      slug: "home-page",
+      props: "slug,title,metadata,type",
+      depth: 2,
     });
-    console.log("Cosmic values section:", JSON.stringify(valuesSection, null, 2));
+    console.log("Cosmic home page data:", JSON.stringify(cosmic, null, 2));
   } catch (error) {
-    console.error("Error fetching values section:", error);
-    // If the section doesn't exist, use fallback data
-    valuesSection = null;
+    console.error("Error fetching home page:", error);
+    // If the home page doesn't exist in Cosmic, use fallback data
+    cosmic = null;
   }
 
-  return <HomePageClient valuesSection={valuesSection} />;
+  return <HomePageClient cosmic={cosmic} />;
 }
