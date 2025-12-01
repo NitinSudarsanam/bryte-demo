@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { Flex, Button, Theme } from '@radix-ui/themes';
 import { CaretDownIcon } from "@radix-ui/react-icons";
 import "./globals.css";
+import "./components/header/header.css"
 
 
 const Header = () => {
