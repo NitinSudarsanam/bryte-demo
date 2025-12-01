@@ -1,5 +1,7 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css?family=League+Spartan&display=swap');
 
+
+@import "tailwindcss";
 @import "@radix-ui/colors/black-alpha.css";
 @import "@radix-ui/colors/indigo.css";
 @import "@radix-ui/colors/mauve.css";
