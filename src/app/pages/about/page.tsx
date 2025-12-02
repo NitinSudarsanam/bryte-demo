@@ -20,7 +20,24 @@ export default async function Page() {
     cosmic = null;
   }
 
-  return <AboutPage cosmic={cosmic} valuesSection={null} />;
+  // Fetch "about-us-our-team" section from Cosmic
+  let teamSection;
+  try {
+    teamSection = await fetchCosmicObject({
+      bucketSlug: "basic-template-production",
+      readKey: "38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f",
+      type: "sections",
+      slug: "about-us-our-team",
+      props: "slug,title,metadata,type",
+      depth: 1,
+    });
+    console.log("Cosmic team section data:", JSON.stringify(teamSection, null, 2));
+  } catch (error) {
+    console.error("Error fetching team section:", error);
+    teamSection = null;
+  }
+
+  return <AboutPage cosmic={cosmic} valuesSection={null} teamSection={teamSection} />;
 }
 
 // "use client";

@@ -24,12 +24,14 @@
   margin: 0 0 1.5rem 0;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: inherit;
 }
 
 .section__body {
   font-size: 1.125rem;
   line-height: 1.7;
   opacity: 0.95;
+  color: inherit;
 }
 
 /* Image container */
@@ -46,6 +48,22 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Starburst overlay for What's BRYTE section style */
+.whats-bryte-section .section__image-container::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  background-image: url("/masthead-star.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Image position variants */
