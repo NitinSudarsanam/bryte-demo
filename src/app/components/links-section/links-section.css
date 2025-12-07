@@ -1,0 +1,109 @@
+/* Root wrapper */
+.cls {
+  background-color: #fce794;
+  color: #22300d;
+  border-radius: 30px;
+  padding: 20px;
+  margin-bottom: 10px;
+  font-family: "League Spartan", Arial, sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header */
+.cls__header {
+  width: 100%;
+  background: #fce794;
+  border: none;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  cursor: pointer;
+}
+
+/* Section title */
+.cls__title {
+  font-size: 40px;
+  font-weight: 510;
+  line-height: 1;
+  margin: 0;
+}
+
+/* +/- icon */
+.cls__icon {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  color: #9b3c35;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  transform-origin: center;
+  transition: transform 300ms cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+.cls__header[aria-expanded="true"] .cls__icon {
+  transform: rotate(180deg);
+}
+
+/* Body */
+.cls__body {
+  margin-top: 20px;
+  background-color: #fce794;
+  font-size: 20px;
+}
+
+/* 3-column link grid */
+.cls__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px 20px;
+}
+
+/* Links */
+.cls__link {
+  color: #9b3c35;
+  font-size: 20px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cls__link:hover {
+  color: #7a2e28;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cls {
+    padding: 16px;
+  }
+
+  .cls__header {
+    padding: 0 12px;
+  }
+
+  .cls__title {
+    font-size: 28px;
+  }
+
+  .cls__icon {
+    font-size: 26px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .cls__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cls__link {
+    font-size: 18px;
+  }
+}
