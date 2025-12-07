@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Header from "../../components/header/header";
+import MastheadPosts from "../../components/masthead/mastheadPosts";
+import "./posts.css";
 
 interface Post {
   slug: string;
@@ -10,60 +13,89 @@ interface Post {
   metadata: {
     title: string;
     excerpt: string;
-    featured_image: {
+    content: string;
+    featured_image?: {
       url: string;
       imgix_url: string;
     };
-    author: {
+    author?: {
       slug: string;
       title: string;
-      metadata: {
+      metadata?: {
         name: string;
-        profile_photo: {
+        profile_photo?: {
           url: string;
         };
       };
     };
-    categories: Array<{
-      slug: string;
-      title: string;
-      metadata: {
-        name: string;
-        color: string;
-      };
-    }>;
+    categories?: (string | { title: string; slug: string })[];
     published_date: string;
   };
+  created_at: string;
 }
 
 export default function PostsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categories, setCategories] = useState<string[]>([]);
+  const [authors, setAuthors] = useState<string[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [noResults, setNoResults] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedAuthor, setSelectedAuthor] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bucketSlug =
-          "posts-production-7d62f3b0-b29a-11f0-a8d7-83e73ed4924b";
-        const readKey = "BPrx2j3rSW3jMMfDVXp5Tvy26hQruLoxPcYTFhFugjDE2AOO4g";
+        const bucketSlug = process.env.NEXT_PUBLIC_COSMIC_BUCKET;
+        const readKey = process.env.NEXT_PUBLIC_COSMIC_READ_KEY;
+
+        if (!bucketSlug || !readKey) {
+          throw new Error("Missing CosmicJS configuration");
+        }
 
         const response = await fetch(
-          `https://api.cosmicjs.com/v3/buckets/${bucketSlug}/objects?pretty=true&read_key=${readKey}&depth=1&props=slug,title,metadata,type`
+          `https://api.cosmicjs.com/v3/buckets/${bucketSlug}/objects?pretty=true&read_key=${readKey}&depth=1&props=id,slug,title,metadata,type,created_at`
         );
 
         if (!response.ok) {
-          throw new Error(`API Error: ${response.status}`);
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
+        const posts =
+          data.objects?.filter((obj: any) => obj.type === "posts") || [];
 
-        // Filter only posts (not authors or categories)
-        const postsOnly = data.objects.filter(
-          (obj: any) => obj.type === "posts"
-        );
-        setPosts(postsOnly);
+        // Extract categories and authors
+        const allCategories = new Set<string>();
+        const allAuthors = new Set<string>();
+
+        posts.forEach((post: Post) => {
+          if (post.metadata?.categories) {
+            post.metadata.categories.forEach(
+              (cat: string | { title: string; slug: string }) => {
+                const categoryName = typeof cat === "string" ? cat : cat.title;
+                allCategories.add(categoryName);
+              }
+            );
+          }
+          if (post.metadata?.author?.metadata?.name) {
+            allAuthors.add(post.metadata.author.metadata.name);
+          } else if (post.metadata?.author?.title) {
+            allAuthors.add(post.metadata.author.title);
+          }
+        });
+
+        setCategories(Array.from(allCategories));
+        setAuthors(Array.from(allAuthors));
+        setPosts(posts);
+        setFilteredPosts(posts);
       } catch (error) {
         console.error("Fetch error:", error);
+        setError((error as Error).message);
       } finally {
         setLoading(false);
       }
@@ -72,130 +104,215 @@ export default function PostsPage() {
     fetchData();
   }, []);
 
-  if (loading) {
-    return (
-      <div style={{ padding: "40px", textAlign: "center" }}>
-        <h1>Loading posts...</h1>
-      </div>
-    );
-  }
+  const performSearch = () => {
+    if (!posts.length) return;
+
+    setIsSearching(true);
+    setNoResults(false);
+
+    let filtered = [...posts];
+
+    // Filter by search term
+    if (searchTerm.trim()) {
+      filtered = filtered.filter((post) => {
+        const title =
+          post.metadata?.title?.toLowerCase() ||
+          post.title?.toLowerCase() ||
+          "";
+        const excerpt = post.metadata?.excerpt?.toLowerCase() || "";
+        const content = post.metadata?.content?.toLowerCase() || "";
+        const author =
+          post.metadata?.author?.metadata?.name?.toLowerCase() ||
+          post.metadata?.author?.title?.toLowerCase() ||
+          "";
+        const searchLower = searchTerm.toLowerCase();
+
+        return (
+          title.includes(searchLower) ||
+          excerpt.includes(searchLower) ||
+          content.includes(searchLower) ||
+          author.includes(searchLower)
+        );
+      });
+    }
+
+    // Filter by category
+    if (selectedCategory) {
+      filtered = filtered.filter((post) => {
+        if (!post.metadata?.categories) return false;
+        return post.metadata.categories.some(
+          (cat: string | { title: string; slug: string }) => {
+            const categoryName = typeof cat === "string" ? cat : cat.title;
+            return categoryName === selectedCategory;
+          }
+        );
+      });
+    }
+
+    // Filter by author
+    if (selectedAuthor) {
+      filtered = filtered.filter((post) => {
+        const author =
+          post.metadata?.author?.metadata?.name || post.metadata?.author?.title;
+        return author === selectedAuthor;
+      });
+    }
+
+    setFilteredPosts(filtered);
+    setNoResults(filtered.length === 0);
+    setIsSearching(false);
+  };
+
+  const handleSearchSubmit = () => {
+    performSearch();
+  };
+
+  const handleSearchInputChange = (value: string) => {
+    setSearchTerm(value);
+    if (noResults && value.trim()) {
+      setNoResults(false);
+    }
+  };
+
+  // Auto-filter when category or author changes
+  useEffect(() => {
+    performSearch();
+  }, [selectedCategory, selectedAuthor]);
+
+  if (loading) return <div className="loading">Loading posts...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
 
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "40px 20px" }}>
-      <h1
-        style={{
-          fontSize: "2.5rem",
-          marginBottom: "2rem",
-          textAlign: "center",
-        }}
-      >
-        Blog Posts
-      </h1>
+    <div>
+      {/* Header */}
+      <Header />
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-        {posts.map((post) => (
-          <article
-            key={post.slug}
-            style={{
-              border: "1px solid #e5e7eb",
-              borderRadius: "8px",
-              padding: "1.5rem",
-              backgroundColor: "#fff",
-              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            {/* Featured Image */}
-            {post.metadata.featured_image && (
-              <img
-                src={post.metadata.featured_image.imgix_url}
-                alt={post.metadata.title}
-                style={{
-                  width: "100%",
-                  height: "200px",
-                  objectFit: "cover",
-                  borderRadius: "6px",
-                  marginBottom: "1rem",
-                }}
-              />
-            )}
+      {/* Masthead */}
+      <MastheadPosts />
 
-            {/* Categories */}
-            {post.metadata.categories &&
-              post.metadata.categories.length > 0 && (
-                <div style={{ marginBottom: "0.5rem" }}>
-                  {post.metadata.categories.map((category) => (
-                    <span
-                      key={category.slug}
-                      style={{
-                        backgroundColor: category.metadata.color,
-                        color: "white",
-                        padding: "0.25rem 0.75rem",
-                        borderRadius: "12px",
-                        fontSize: "0.875rem",
-                        marginRight: "0.5rem",
-                      }}
-                    >
-                      {category.metadata.name}
-                    </span>
-                  ))}
-                </div>
-              )}
+      {/* Main Content */}
+      <div className="posts-container">
+        {/* Search and Filter Section */}
+        <div className="search-section">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => handleSearchInputChange(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSearchSubmit()}
+              className="search-input"
+            />
+            <button onClick={handleSearchSubmit} className="search-button">
+              🔍
+            </button>
+          </div>
 
-            {/* Title */}
-            <h2
-              style={{
-                fontSize: "1.5rem",
-                marginBottom: "0.5rem",
-                color: "#1f2937",
-              }}
+          <div className="filters-container">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="filter-select"
             >
-              <Link
-                href={`/post/${post.slug}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                {post.metadata.title}
-              </Link>
-            </h2>
+              <option value="">Category</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
 
-            {/* Excerpt */}
-            <p
-              style={{
-                color: "#6b7280",
-                marginBottom: "1rem",
-                lineHeight: "1.6",
-              }}
+            <select
+              value={selectedAuthor}
+              onChange={(e) => setSelectedAuthor(e.target.value)}
+              className="filter-select"
             >
-              {post.metadata.excerpt}
-            </p>
+              <option value="">Author</option>
+              {authors.map((author) => (
+                <option key={author} value={author}>
+                  {author}
+                </option>
+              ))}
+            </select>
 
-            {/* Author and Date */}
-            <div
-              style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
-            >
-              {post.metadata.author?.metadata?.profile_photo && (
-                <img
-                  src={post.metadata.author.metadata.profile_photo.url}
-                  alt={post.metadata.author.metadata.name}
-                  style={{
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                  }}
-                />
-              )}
-              <div>
-                <div style={{ fontWeight: "500", fontSize: "0.875rem" }}>
-                  {post.metadata.author?.metadata?.name ||
-                    post.metadata.author?.title}
+            <select className="filter-select">
+              <option value="">Sort by Date</option>
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Loading/Error/No Results States */}
+        {isSearching && <div className="loading">Searching...</div>}
+
+        {noResults && (
+          <div className="no-results">
+            No posts found matching your search criteria.
+          </div>
+        )}
+
+        {/* Posts Grid */}
+        {!isSearching && !noResults && (
+          <div className="posts-grid">
+            {filteredPosts.map((post) => (
+              <div className="post-card" key={post.slug}>
+                <Link href={`/post/${post.slug}`}>
+                  <h2 className="post-title">
+                    {post.metadata?.title || post.title}
+                  </h2>
+                </Link>
+                <p className="post-excerpt">{post.metadata?.excerpt}</p>
+                <div className="post-meta">
+                  <img src="/masthead-star.svg" alt="" className="post-star" />
+                  <div className="post-meta-text">
+                    <div className="post-author">
+                      {post.metadata?.author?.metadata?.name ||
+                        post.metadata?.author?.title ||
+                        "Anonymous"}
+                    </div>
+                    <div className="post-date">
+                      {new Date(
+                        post.metadata?.published_date || post.created_at
+                      ).toLocaleDateString()}
+                    </div>
+                  </div>
                 </div>
-                <div style={{ color: "#6b7280", fontSize: "0.875rem" }}>
-                  {new Date(post.metadata.published_date).toLocaleDateString()}
-                </div>
+                {post.metadata?.categories && (
+                  <div className="post-categories">
+                    {post.metadata.categories
+                      .slice(0, 3)
+                      .map(
+                        (
+                          category: string | { title: string; slug: string },
+                          index: number
+                        ) => {
+                          const categoryName =
+                            typeof category === "string"
+                              ? category
+                              : category.title;
+                          const categoryClass =
+                            categoryName?.toLowerCase().replace(/\s+/g, "-") ||
+                            "default";
+                          return (
+                            <span
+                              key={index}
+                              className={`category-tag ${categoryClass}`}
+                            >
+                              {categoryName}
+                            </span>
+                          );
+                        }
+                      )}
+                    {post.metadata.categories.length > 3 && (
+                      <span className="category-tag plus">+</span>
+                    )}
+                  </div>
+                )}
               </div>
-            </div>
-          </article>
-        ))}
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

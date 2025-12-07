@@ -1,103 +1,138 @@
-import Image from "next/image";
+import { fetchCosmicObject } from "@/app/lib/cosmic";
+import AboutPage from "./AboutPage";
 
-export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+export default async function Page() {
+  // Fetch "about-us" page object from Cosmic using the correct bucket
+  let cosmic;
+  try {
+    cosmic = await fetchCosmicObject({
+      bucketSlug: "basic-template-production",
+      readKey: "38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f",
+      type: "pages",
+      slug: "about-us",
+      props: "slug,title,metadata,type",
+      depth: 2,
+    });
+    console.log("Cosmic about data:", JSON.stringify(cosmic, null, 2));
+  } catch (error) {
+    console.error("Error fetching about:", error);
+    // If the about object doesn't exist in Cosmic, use fallback data
+    cosmic = null;
+  }
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+  // Fetch "about us - our values" section from Cosmic (the why bryte section)
+  let valuesSection;
+  try {
+    valuesSection = await fetchCosmicObject({
+      bucketSlug: "basic-template-production",
+      readKey: "38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f",
+      type: "sections",
+      slug: "about-us-why-bryte",
+      props: "slug,title,metadata",
+      depth: 1,
+    });
+    console.log("Cosmic values section:", JSON.stringify(valuesSection, null, 2));
+  } catch (error) {
+    console.error("Error fetching values section:", error);
+    // If the section doesn't exist, use fallback data
+    valuesSection = null;
+  }
+
+  return <AboutPage cosmic={cosmic} valuesSection={valuesSection} />;
 }
+
+// "use client";
+// import AccordionComponent from "@/app/components/accordion";
+// import Section from "@/app/components/section/section";
+// import Header from "@/app/components/header";
+// import CosmicTemplate from "@/app/components/CosmicTemplate";
+
+// export default function AboutPage() {
+//   const aboutItems = [
+//     {
+//       id: "item-1",
+//       title: "Our Mission",
+//       content:
+//         "BRYTE's mission is to support the self-empowerment of refugee youth by providing academic tutoring and mentoring, as well as by fostering community among students who share experiences of resettlement in the United States.",
+//     },
+//     {
+//       id: "item-2",
+//       title: "Our Values",
+//       content: (
+//         <>
+//           <strong>Whole Child, Whole Families, Whole Care </strong>
+//           <br />
+//           We recognize that no child learns in a vacuum. Every child's
+//           wellbeing, ability to learn, and life at home are deeply intertwined.
+//           We also recognize that every child is different, with unique needs,
+//           strengths, histories of trauma, and relationships to school. For these
+//           reasons, we provide one-on-one tutoring and mentoring and commit to
+//           meeting our youth where they are and as they are. Our goal is overall
+//           wellness, rather than a sharp focus exclusively on academic outcomes.
+//           <br />
+//           <br />
+//           <strong>Student Leadership</strong>
+//           <br />
+//           We are a group of undergraduate, medical, and public health students,
+//           who are also advised by a board of high school-aged alumni of BRYTE.
+//           We believe in the unique power, energy, and creativity of student
+//           organizations and student movements. We believe student leadership
+//           benefits everybody in our program, creating deep relationships that
+//           transform both refugee youth and students in higher education.
+//           <br />
+//           <br />
+//           <strong>Longitudinal Relationships</strong>
+//           <br />
+//           We recognize that every refugee child and refugee family has a unique
+//           journey to adapting and thriving in a new environment. For this
+//           reason, we work with both newly-arrived youth and youth who have lived
+//           in the United States for some time. We do not adhere to a fixed policy
+//           at which we "phase out" our youth but address each case on an
+//           individualized basis. We form deep relationships with our students and
+//           families that often last long beyond tutoring. As our students grow,
+//           we create opportunities for them to exercise leadership and service in
+//           their communities.
+//           <br />
+//           <br />
+//           <strong>Self-Reflection and Accountability</strong>
+//           <br />
+//           We diligently document our work and create layers of accountability at
+//           every step. Our work is supervised and closely advised by experts, and
+//           we engage in formal didactic trainings alongside our
+//           learning-by-doing. We are transparent about how we spend our resources
+//           and regularly report our process and outcome measures to our
+//           supporters. We evaluate our impact both quantitatively and
+//           qualitatively and practice deep self-reflection, striving always to
+//           improve our work.
+//           <br />
+//           <br />
+//           <strong>Soul</strong>
+//           <br />
+//           We recognize that it is impossible to engage in this work without
+//           being deeply moved by it. We are here to share ourselves with our
+//           youth and to create the space for them to share themselves with us and
+//           with each other. We embrace emotional honesty, joy, and above all,
+//           love.
+//         </>
+//       ),
+//     },
+//   ];
+
+//   return (
+//     <>
+//       <Header />
+//       <AccordionComponent title="About Bryte!" items={aboutItems} />
+//       <Section
+//         title="WHY BRYTE?"
+//         content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+//         image={{
+//           src: "/path/to/your/image.jpg",
+//           alt: "Children playing sports outdoors",
+//         }}
+//         imagePosition="right"
+//         sectionBackgroundColor="var(--darkgreen)"
+//         sectionTextColor="#fff"
+//       ></Section>
+//     </>
+//   );
+// }

@@ -52,9 +52,12 @@ export default function PostPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const bucketSlug =
-          "posts-production-7d62f3b0-b29a-11f0-a8d7-83e73ed4924b";
-        const readKey = "BPrx2j3rSW3jMMfDVXp5Tvy26hQruLoxPcYTFhFugjDE2AOO4g";
+        const bucketSlug = process.env.NEXT_PUBLIC_COSMIC_BUCKET;
+        const readKey = process.env.NEXT_PUBLIC_COSMIC_READ_KEY;
+
+        if (!bucketSlug || !readKey) {
+          throw new Error("Missing CosmicJS configuration");
+        }
 
         // First, get all posts to find the one with matching slug
         const allPostsResponse = await fetch(
