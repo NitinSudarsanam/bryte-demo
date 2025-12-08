@@ -11,7 +11,7 @@
 body {
   background-color: var(--light-cream);
   margin: 0;
-  font-family: "Arial", "Helvetica", sans-serif;
+  font-family: "League Spartan", sans-serif;
 }
 
 /* Header and Navigation */
@@ -274,10 +274,11 @@ body {
 .post-card {
   background: var(--card-cream);
   border-radius: 20px;
-  padding: 30px;
+  padding: 0;
   box-shadow: 0 6px 20px rgba(45, 74, 62, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
   border: 2px solid transparent;
+  overflow: hidden;
 }
 
 .post-card:hover {
@@ -286,10 +287,21 @@ body {
   border-color: var(--deep-orange);
 }
 
+.post-featured-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+}
+
+.post-card-content {
+  padding: 30px;
+}
+
 .post-title {
-  font-size: 1.6rem;
+  font-size: 2.5rem;
   font-weight: 900;
-  color: var(--forest-green);
+  color: #22300d;
   margin-bottom: 15px;
   line-height: 1.2;
   text-transform: uppercase;
@@ -304,22 +316,35 @@ body {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 .post-meta {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
+  gap: 10px;
 }
 
-.post-star {
-  width: 32px;
-  height: 32px;
+.post-meta-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.bryte-star-wrap {
+  width: var(--row-h);
   flex-shrink: 0;
+}
+
+.bryte-star {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  transition: transform 4s ease-in-out;
+  transform-origin: center;
 }
 
 .post-meta-text {
@@ -334,25 +359,27 @@ body {
 }
 
 .post-date {
-  color: #888;
-  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--dark-text);
 }
 
 .post-categories {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 15px;
+  gap: 8px;
+  align-items: center;
 }
 
 .category-tag {
   padding: 8px 16px;
   border-radius: 25px;
   font-size: 0.8rem;
+  background-color: #964238;
   font-weight: 600;
   color: white;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .category-tag.families {

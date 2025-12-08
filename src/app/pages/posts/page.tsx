@@ -257,58 +257,83 @@ export default function PostsPage() {
           <div className="posts-grid">
             {filteredPosts.map((post) => (
               <div className="post-card" key={post.slug}>
-                <Link href={`/post/${post.slug}`}>
-                  <h2 className="post-title">
-                    {post.metadata?.title || post.title}
-                  </h2>
-                </Link>
-                <p className="post-excerpt">{post.metadata?.excerpt}</p>
-                <div className="post-meta">
-                  <img src="/masthead-star.svg" alt="" className="post-star" />
-                  <div className="post-meta-text">
-                    <div className="post-author">
-                      {post.metadata?.author?.metadata?.name ||
-                        post.metadata?.author?.title ||
-                        "Anonymous"}
+                {post.metadata?.featured_image && (
+                  <Link href={`/post/${post.slug}`}>
+                    <img
+                      src={
+                        post.metadata.featured_image.imgix_url ||
+                        post.metadata.featured_image.url
+                      }
+                      alt={post.metadata?.title || post.title}
+                      className="post-featured-image"
+                    />
+                  </Link>
+                )}
+                <div className="post-card-content">
+                  <Link href={`/post/${post.slug}`}>
+                    <h2 className="post-title">
+                      {post.metadata?.title || post.title}
+                    </h2>
+                  </Link>
+                  <p className="post-excerpt">{post.metadata?.excerpt}</p>
+                  <div className="post-meta">
+                    <div className="post-meta-left">
+                      <div className="bryte-star-wrap">
+                        <img
+                          src="/post-star.svg"
+                          alt=""
+                          className="bryte-star"
+                        />
+                      </div>
+                      <div className="post-meta-text">
+                        <div className="post-author">
+                          {post.metadata?.author?.metadata?.name ||
+                            post.metadata?.author?.title ||
+                            "Anonymous"}
+                        </div>
+                        <div className="post-date">
+                          {new Date(
+                            post.metadata?.published_date || post.created_at
+                          ).toLocaleDateString()}
+                        </div>
+                      </div>
                     </div>
-                    <div className="post-date">
-                      {new Date(
-                        post.metadata?.published_date || post.created_at
-                      ).toLocaleDateString()}
-                    </div>
-                  </div>
-                </div>
-                {post.metadata?.categories && (
-                  <div className="post-categories">
-                    {post.metadata.categories
-                      .slice(0, 3)
-                      .map(
-                        (
-                          category: string | { title: string; slug: string },
-                          index: number
-                        ) => {
-                          const categoryName =
-                            typeof category === "string"
-                              ? category
-                              : category.title;
-                          const categoryClass =
-                            categoryName?.toLowerCase().replace(/\s+/g, "-") ||
-                            "default";
-                          return (
-                            <span
-                              key={index}
-                              className={`category-tag ${categoryClass}`}
-                            >
-                              {categoryName}
-                            </span>
-                          );
-                        }
-                      )}
-                    {post.metadata.categories.length > 3 && (
-                      <span className="category-tag plus">+</span>
+                    {post.metadata?.categories && (
+                      <div className="post-categories">
+                        {post.metadata.categories
+                          .slice(0, 3)
+                          .map(
+                            (
+                              category:
+                                | string
+                                | { title: string; slug: string },
+                              index: number
+                            ) => {
+                              const categoryName =
+                                typeof category === "string"
+                                  ? category
+                                  : category.title;
+                              const categoryClass =
+                                categoryName
+                                  ?.toLowerCase()
+                                  .replace(/\s+/g, "-") || "default";
+                              return (
+                                <span
+                                  key={index}
+                                  className={`category-tag ${categoryClass}`}
+                                >
+                                  {categoryName}
+                                </span>
+                              );
+                            }
+                          )}
+                        {post.metadata.categories.length > 3 && (
+                          <span className="category-tag plus">+</span>
+                        )}
+                      </div>
                     )}
                   </div>
-                )}
+                </div>
               </div>
             ))}
           </div>
