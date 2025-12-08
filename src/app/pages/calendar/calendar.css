@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+
+.calendar-container {
+  border: 5px solid #6E7E4A;  
+  border-radius: 60px;   
+  
+}
+
+.calendar-container-container {
+   padding: 30px;         
+}
+
+.calendar-style {
+  
+  border-radius: 60px;   
+  padding: 0px;         
+}
