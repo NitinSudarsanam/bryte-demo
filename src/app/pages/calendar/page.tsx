@@ -1,5 +1,4 @@
 import CalendarEmbed from "./calendar";
-import Header from "../../header";
 import "./calendar.css"
 
 import Section from "@/app/components/section/section";
