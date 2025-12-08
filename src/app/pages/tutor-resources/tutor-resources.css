@@ -1,17 +1,17 @@
-.parent-resources-page {
+.tutor-resources-page {
   background-color: #fefae1;
   font-family: "League Spartan", Arial, sans-serif;
   padding: 40px 0;
 }
 
 /* Full-width inner content */
-.parent-resources-inner {
+.tutor-resources-inner {
   width: 100%;
   padding: 20px;
 }
 
 /* Title */
-.parent-resources-title {
+.tutor-resources-title {
   color: #22300d;
   font-size: 75px;
   text-align: center;
@@ -19,20 +19,20 @@
 }
 
 /* Space between link sections */
-.parent-resources-inner > * + * {
+.tutor-resources-inner > * + * {
   margin-top: 12px;
 }
 
 @media (max-width: 768px) {
-  .parent-resources-title {
+  .tutor-resources-title {
     font-size: 40px;
   }
 
-  .parent-resources-page {
+  .tutor-resources-page {
     padding: 24px 0 40px;
   }
 
-  .parent-resources-inner {
+  .tutor-resources-inner {
     padding: 16px;
   }
 }
