@@ -1,81 +1,117 @@
-"use client";
-
-import * as React from "react";
+import { createBucketClient } from "@cosmicjs/sdk";
 import Header from "@/app/components/header";
+import Masthead from "@/app/components/masthead/masthead";
 import CollapsibleLinkSection from "@/app/components/links-section/links-section";
 import "./tutor-resources.css";
 
-type LinkItem = {
-  title: string;
-  url: string;
-  description?: string | null;
-};
+type LinksDict = Record<string, string>;
 
 type TutorSection = {
   slug: string;
   title: string;
-  info?: string | null;
-  links: LinkItem[];
+  links: LinksDict;
 };
 
-const ResourcesForBryteTutorsPage: React.FC = () => {
-  const [sections, setSections] = React.useState<TutorSection[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+function extractLinks(htmlString: string): LinksDict {
+  if (!htmlString) return {};
+  
+  const links: LinksDict = {};
+  const linkRegex = /<a[^>]*href="([^"]+)"[^>]*>([^<]+)<\/a>/gi;
+  let match;
+  
+  while ((match = linkRegex.exec(htmlString)) !== null) {
+    const url = match[1];
+    const title = match[2].trim();
+    if (title && url) {
+      links[title] = url;
+    }
+  }
+  
+  return links;
+}
 
-  React.useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetch("/api/tutor-resources");
-        if (!res.ok) {
-          throw new Error(`Status ${res.status}`);
-        }
-        const data = await res.json();
-        setSections(data.sections || []);
-      } catch (e) {
-        console.error("Failed to load tutor resources:", e);
-        setError("Unable to load tutor resources at this time.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, []);
+export default async function ResourcesForBryteTutorsPage() {
+  let sections: TutorSection[] = [];
+  let error: string | null = null;
+
+  try {
+    const bucketSlug = process.env.COSMIC_BUCKET_SLUG!;
+    const readKey = process.env.COSMIC_READ_KEY!;
+
+    const cosmic = createBucketClient({
+      bucketSlug,
+      readKey,
+    });
+
+    const data = await cosmic.objects
+      .findOne({
+        type: "sections",
+        slug: "resources-for-tutors",
+      })
+      .props("slug,title,metadata")
+      .depth(1);
+
+    if (!data?.object?.metadata?.tutor_resources) {
+      throw new Error("No tutor resources data returned from Cosmic");
+    }
+
+    const tutorResources = data.object.metadata.tutor_resources;
+    
+    sections = tutorResources.map((resource: any) => {
+      const metadata = resource.metadata || {};
+      const info = metadata.info || "";
+      
+      return {
+        slug: resource.slug,
+        title: resource.title,
+        links: extractLinks(info),
+      };
+    });
+  } catch (e) {
+    console.error("Failed to load tutor resources:", e);
+    error = "Unable to load tutor resources at this time.";
+  }
 
   return (
     <div className="tutor-resources-page">
+      <Header />
+      <Masthead
+        showLargeTitle={true}
+        showAtSymbol={false}
+        topRowPillColorClass="bryte-pill-green"
+        titleWords={["Tutor Resources"]}
+        decorativePills={[
+          {
+            colorClass: "bryte-pill-maroon",
+            size: "long",
+            row: 0,
+            position: "left",
+          },
+          {
+            colorClass: "bryte-pill-orange",
+            size: "short",
+            row: 0,
+            position: "right",
+          },
+        ]}
+      />
+
       <div className="tutor-resources-inner">
-        <Header />
-        <h1 className="tutor-resources-title">Tutor Resources</h1>
+        {error && <p className="error-message">{error}</p>}
 
-        {loading && <p>Loading…</p>}
-        {error && <p>{error}</p>}
-
-        {!loading && !error && sections.length === 0 && (
-          <p>No resources available right now.</p>
+        {!error && sections.length === 0 && (
+          <p className="no-resources-message">No resources available right now.</p>
         )}
 
-        {!loading &&
-          !error &&
-          sections.map((section) => {
-            const linksDict: Record<string, string> = {};
-            section.links.forEach((link) => {
-              if (link.title && link.url) {
-                linksDict[link.title] = link.url;
-              }
-            });
-
-            return (
-              <CollapsibleLinkSection
-                key={section.slug}
-                title={section.title}
-                links={linksDict}
-              />
-            );
-          })}
+        {!error &&
+          sections.map((section) => (
+            <CollapsibleLinkSection
+              key={section.slug}
+              title={section.title}
+              links={section.links}
+            />
+          ))}
       </div>
     </div>
   );
-};
-
-export default ResourcesForBryteTutorsPage;
+}

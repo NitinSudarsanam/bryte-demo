@@ -24,14 +24,25 @@ const SlideshowComponent: React.FC<SlideshowComponentProps> = ({
   className,
 }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
 
   const nextSlide = React.useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % slides.length);
-  }, [slides.length]);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
+      setIsTransitioning(false);
+    }, 300);
+  }, [slides.length, isTransitioning]);
 
   const prevSlide = React.useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
-  }, [slides.length]);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
+      setIsTransitioning(false);
+    }, 300);
+  }, [slides.length, isTransitioning]);
 
   const current = slides[currentIndex];
   const prev = slides[(currentIndex - 1 + slides.length) % slides.length];
@@ -55,17 +66,17 @@ const SlideshowComponent: React.FC<SlideshowComponentProps> = ({
           <img
             src={prev.image}
             alt="Previous"
-            className="slide side-slide"
+            className={classNames("slide side-slide", { "transitioning": isTransitioning })}
           />
           <img
             src={current.image}
             alt={current.caption}
-            className="slide main-slide"
+            className={classNames("slide main-slide", { "transitioning": isTransitioning })}
           />
           <img
             src={next.image}
             alt="Next"
-            className="slide side-slide"
+            className={classNames("slide side-slide", { "transitioning": isTransitioning })}
           />
         </div>
 

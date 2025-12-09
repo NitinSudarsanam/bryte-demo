@@ -6,10 +6,10 @@ export default async function Page() {
   let cosmic;
   try {
     cosmic = await fetchCosmicObject({
-      bucketSlug: "basic-template-production",
-      readKey: "38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f",
+      bucketSlug: process.env.COSMIC_BUCKET_SLUG!,
+      readKey: process.env.COSMIC_READ_KEY!,
       type: "pages",
-      slug: "about-us",
+      slug: "about-page",
       props: "slug,title,metadata,type",
       depth: 2,
     });

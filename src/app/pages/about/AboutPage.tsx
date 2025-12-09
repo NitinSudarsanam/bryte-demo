@@ -2,11 +2,13 @@
 
 import AccordionComponent from "@/app/components/accordion";
 import Header from "@/app/components/header";
+import Section from "@/app/components/section/section";
 import "./about.css";
 import Masthead from "@/app/components/masthead/masthead";
 
 interface CosmicSection {
   id: string;
+  slug?: string;
   metadata: {
     header: string;
     body_text: string;
@@ -43,9 +45,25 @@ interface TeamSection {
   };
 }
 
+interface ValuesSection {
+  metadata?: {
+    header?: string;
+    body_text?: string;
+    images?: Array<{
+      title?: string;
+      metadata?: {
+        image?: {
+          imgix_url?: string;
+          url?: string;
+        };
+      };
+    }>;
+  };
+}
+
 interface AboutPageProps {
   cosmic: CosmicData | null;
-  valuesSection: null;
+  valuesSection: ValuesSection | null;
   teamSection: TeamSection | null;
 }
 
@@ -74,14 +92,14 @@ function parsePersonDetails(fullDescription: string) {
   return details;
 }
 
-export default function AboutPage({ cosmic, teamSection }: AboutPageProps) {
+export default function AboutPage({ cosmic, teamSection, valuesSection }: AboutPageProps) {
   // Fallback content if Cosmic data is not available
   const fallbackItems = [
     {
       id: "item-1",
       title: "Our Mission",
       content:
-        "YOYOBRYTE's mission is to support the self-empowerment of refugee youth by providing academic tutoring and mentoring, as well as by fostering community among students who share experiences of resettlement in the United States.",
+        "BRYTE's mission is to support the self-empowerment of refugee youth by providing academic tutoring and mentoring, as well as by fostering community among students who share experiences of resettlement in the United States.",
     },
     {
       id: "item-2",
@@ -146,20 +164,27 @@ export default function AboutPage({ cosmic, teamSection }: AboutPageProps) {
     },
   ];
 
-  // Map Cosmic sections → your accordion format (or use fallback)
   const sections = cosmic?.metadata?.sections || [];
   
-  let aboutItems = sections.length > 0
-    ? sections.map((section, index) => ({
-        id: section.id || `item-${index + 1}`,
-        title: section.metadata?.header || "",
-        content: (
-          <div
-            dangerouslySetInnerHTML={{ __html: section.metadata?.body_text || "" }}
-          />
-        ),
-      }))
-    : fallbackItems;
+  // Filter out the "why bryte" section from accordion items since it will be displayed separately
+  const accordionSections = sections.filter(
+    (section) => section.slug !== "about-us-why-bryte"
+  );
+
+  let aboutItems =
+    accordionSections.length > 0
+      ? accordionSections.map((section, index) => ({
+          id: section.id || `item-${index + 1}`,
+          title: section.metadata?.header || "",
+          content: (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: section.metadata?.body_text || "",
+              }}
+            />
+          ),
+        }))
+      : fallbackItems;
 
   // Add team section as an accordion item if team members exist
   const teamMembers = teamSection?.metadata?.people || [];
@@ -219,32 +244,6 @@ export default function AboutPage({ cosmic, teamSection }: AboutPageProps) {
     ];
   }
 
-  // Filter out the "why bryte" section from accordion items since it will be displayed separately
-  const accordionSections = sections.filter(
-    (section) => section.slug !== "about-us-why-bryte"
-  );
-
-  const aboutItems =
-    accordionSections.length > 0
-      ? accordionSections.map((section, index) => ({
-          id: section.id || `item-${index + 1}`,
-          title: section.metadata?.header || "",
-          content: (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: section.metadata?.body_text || "",
-              }}
-            />
-          ),
-        }))
-      : fallbackItems;
-
-  // Find a section with an image for the bottom Section component (not used anymore)
-  const sectionWithImage = sections.find(
-    (section) =>
-      section.metadata?.image?.imgix_url || section.metadata?.image?.url
-  );
-
   return (
     <>
       <Header />
@@ -252,7 +251,7 @@ export default function AboutPage({ cosmic, teamSection }: AboutPageProps) {
         showLargeTitle={true}
         showAtSymbol={false}
         topRowPillColorClass="bryte-pill-green"
-        titleWords={["About us"]} // One line
+        titleWords={["About us"]}
         decorativePills={[
           {
             colorClass: "bryte-pill-maroon",

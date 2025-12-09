@@ -40,7 +40,7 @@ const Header: React.FC = () => {
             <NavigationMenu.Item>
               <NavigationMenu.Link
                 className="NavigationMenuLink"
-                href="/pages/parent-resources"
+                href="/pages/resources"
               >
                 Resources
               </NavigationMenu.Link>

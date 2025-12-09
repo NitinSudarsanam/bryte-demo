@@ -18,8 +18,8 @@ export async function fetchCosmicObject({
   depth = 1,
 }: FetchCosmicObjectParams) {
   const cosmic = createBucketClient({
-    bucketSlug: bucketSlug || process.env.COSMIC_BUCKET_SLUG || 'basic-template-production',
-    readKey: readKey || process.env.COSMIC_READ_KEY || '38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f',
+    bucketSlug: bucketSlug || process.env.COSMIC_BUCKET_SLUG!,
+    readKey: readKey || process.env.COSMIC_READ_KEY!,
   })
 
   const data = await cosmic.objects

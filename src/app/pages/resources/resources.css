@@ -1,0 +1,58 @@
+.resources-page {
+  background-color: #fefae1;
+  font-family: "League Spartan", Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* Full-width inner content */
+.resources-inner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.resources-section {
+  margin-bottom: 60px;
+}
+
+.section-heading {
+  color: #22300d;
+  font-size: 48px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.error-message {
+  color: #9b3c35;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
+}
+
+.no-resources-message {
+  color: #22300d;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Space between link sections */
+.resources-inner > * + * {
+  margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .resources-inner {
+    padding: 24px 16px;
+  }
+
+  .section-heading {
+    font-size: 36px;
+  }
+
+  .resources-section {
+    margin-bottom: 40px;
+  }
+}

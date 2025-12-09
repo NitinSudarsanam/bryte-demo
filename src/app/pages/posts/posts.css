@@ -1,11 +1,10 @@
 :root {
-  --forest-green: #2d4a3e;
-  --deep-orange: #b8572a;
+  --forest-green: #6e7e4a;
+  --deep-maroon: #964238;
   --light-cream: #fefae1;
-  --dark-text: #2c2c2c;
-  --deep-gold: #f4c430;
+  --dark-text: #22300d;
   --card-cream: #fce794;
-  --border-green: #3e5a4a;
+  --border-green: #6e7e4a;
 }
 
 body {
@@ -136,6 +135,9 @@ body {
 .search-section {
   text-align: center;
   margin-bottom: 40px;
+  background-color: var(--light-cream);
+  padding: 30px 20px;
+  border-radius: 20px;
 }
 
 .avatar-section {
@@ -146,7 +148,7 @@ body {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: var(--deep-orange);
+  background-color: var(--deep-maroon);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -156,78 +158,91 @@ body {
 }
 
 .search-container {
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto 30px;
   position: relative;
 }
 
 .search-input {
   width: 100%;
-  padding: 18px 50px 18px 20px;
-  font-size: 1rem;
-  border: 2px solid var(--border-green);
+  padding: 18px 60px 18px 50px;
+  font-size: 1.1rem;
+  border: 3px solid var(--border-green);
   border-radius: 50px;
   outline: none;
   transition: border-color 0.3s;
-  background-color: var(--light-cream);
+  background-color: white;
   box-sizing: border-box;
+  font-family: "League Spartan", sans-serif;
+  color: var(--dark-text);
+}
+
+.search-input::before {
+  content: "🔍";
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
 }
 
 .search-input:focus {
-  border-color: var(--deep-orange);
+  border-color: var(--deep-maroon);
 }
 
 .search-button {
   position: absolute;
-  right: 8px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  background: var(--forest-green);
-  color: var(--light-cream);
+  background: transparent;
+  color: var(--forest-green);
   border: none;
-  border-radius: 50%;
   width: 40px;
   height: 40px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s;
+  font-size: 24px;
+  transition: color 0.3s;
 }
 
 .search-button:hover {
-  background: var(--deep-orange);
+  color: var(--deep-maroon);
 }
 
 .filters-container {
   display: flex;
   gap: 15px;
   justify-content: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
 .filter-select {
-  padding: 12px 20px;
-  font-size: 0.95rem;
+  padding: 14px 24px;
+  font-size: 1rem;
   border: none;
-  border-radius: 25px;
-  background: var(--forest-green);
-  color: var(--light-cream);
+  border-radius: 30px;
+  background: #22300d;
+  color: white;
   outline: none;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
   min-width: 150px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: "League Spartan", sans-serif;
 }
 
 .filter-select:hover {
-  background: var(--deep-orange);
+  background: var(--deep-maroon);
+  transform: translateY(-2px);
 }
 
 .filter-select option {
-  background: var(--forest-green);
-  color: var(--light-cream);
+  background: #22300d;
+  color: white;
 }
 
 /* Loading, Error, and No Results States */
@@ -266,66 +281,68 @@ body {
   flex-direction: column;
   gap: 30px;
   margin-top: 30px;
-  max-width: 900px;
+  max-width: 700px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .post-card {
   background: var(--card-cream);
-  border-radius: 20px;
+  border-radius: 30px;
   padding: 0;
-  box-shadow: 0 6px 20px rgba(45, 74, 62, 0.1);
+  box-shadow: 0 4px 12px rgba(34, 48, 13, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
-  border: 2px solid transparent;
+  border: none;
   overflow: hidden;
 }
 
 .post-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(45, 74, 62, 0.15);
-  border-color: var(--deep-orange);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(34, 48, 13, 0.15);
 }
 
 .post-featured-image {
   width: 100%;
-  height: 250px;
+  height: 300px;
   object-fit: cover;
   display: block;
+  border-radius: 20px;
+  margin: 20px 20px 0 20px;
+  width: calc(100% - 40px);
 }
 
 .post-card-content {
-  padding: 30px;
+  padding: 25px 30px 30px;
 }
 
 .post-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 900;
-  color: #22300d;
+  color: var(--dark-text);
   margin-bottom: 15px;
   line-height: 1.2;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
+}
+
+.post-title:hover {
+  color: var(--deep-maroon);
 }
 
 .post-excerpt {
   color: var(--dark-text);
   line-height: 1.6;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
-  font-size: 1rem;
-}
-
 .post-meta {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 1.1rem;
-  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.95rem;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 .post-meta-left {
@@ -335,7 +352,8 @@ body {
 }
 
 .bryte-star-wrap {
-  width: var(--row-h);
+  width: 45px;
+  height: 45px;
   flex-shrink: 0;
 }
 
@@ -350,17 +368,19 @@ body {
 .post-meta-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .post-author {
   font-weight: 700;
   color: var(--dark-text);
+  font-size: 1rem;
 }
 
 .post-date {
-  font-weight: 700;
+  font-weight: 600;
   color: var(--dark-text);
+  font-size: 0.9rem;
 }
 
 .post-categories {
@@ -372,26 +392,31 @@ body {
 
 .category-tag {
   padding: 8px 16px;
-  border-radius: 25px;
-  font-size: 0.8rem;
-  background-color: #964238;
-  font-weight: 600;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  background-color: var(--deep-maroon);
+  font-weight: 700;
   color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
   white-space: nowrap;
+  transition: transform 0.2s;
+}
+
+.category-tag:hover {
+  transform: scale(1.05);
 }
 
 .category-tag.families {
-  background-color: #8b1538;
+  background-color: #964238;
 }
 
 .category-tag.tips {
-  background-color: #e67e22;
+  background-color: #d97730;
 }
 
 .category-tag.kids {
-  background-color: var(--forest-green);
+  background-color: #6e7e4a;
 }
 
 .category-tag.events {
@@ -403,9 +428,17 @@ body {
 }
 
 .category-tag.plus {
-  background-color: var(--forest-green);
+  background-color: var(--dark-text);
   display: flex;
   align-items: center;
+  justify-content: center;
+  min-width: 35px;
+  height: 35px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 900;
+} align-items: center;
   justify-content: center;
   min-width: 32px;
   height: 32px;

@@ -19,10 +19,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Removed dark mode to maintain consistent cream background */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #fefae1;
+    --foreground: #171717;
   }
 }
 

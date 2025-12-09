@@ -6,8 +6,8 @@ export default async function HomePage() {
   let cosmic;
   try {
     cosmic = await fetchCosmicObject({
-      bucketSlug: "basic-template-production",
-      readKey: "38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f",
+      bucketSlug: process.env.COSMIC_BUCKET_SLUG!,
+      readKey: process.env.COSMIC_READ_KEY!,
       type: "pages",
       slug: "home-page",
       props: "slug,title,metadata,type",
@@ -21,20 +21,4 @@ export default async function HomePage() {
   }
 
   return <HomePageClient cosmic={cosmic} />;
-}
-export default function HomePage() {
-  return (
-    <div>
-      <Header />
-      <Masthead
-        showAtSymbol={true}
-        topRowPillColorClass="bryte-pill-maroon"
-        subtitle="Brown Refugee Youth Tutoring & Enrichment"
-        animatedWords={["child", "family", "care"]}
-        showWholeSection={true}
-      />
-
-      <Slideshow slides={slides} />
-    </div>
-  );
 }

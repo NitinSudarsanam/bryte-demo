@@ -1,6 +1,8 @@
 "use client";
 import * as React from "react";
+import * as Accordion from "@radix-ui/react-accordion";
 import classNames from "classnames";
+import { TriangleDownIcon } from "@radix-ui/react-icons";
 import "./links-section.css";
 
 export interface CollapsibleLinkSectionProps {
@@ -14,40 +16,61 @@ const CollapsibleLinkSection: React.FC<CollapsibleLinkSectionProps> = ({
   links,
   className,
 }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
   const entries = Object.entries(links);
+  const itemRef = React.useRef<HTMLDivElement | null>(null);
+
+  // Smoothly scroll the opened item into view
+  const handleValueChange = (value: string) => {
+    if (value && itemRef.current) {
+      setTimeout(() => {
+        itemRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 300); // matches CSS transition time
+    }
+  };
 
   if (!entries.length) return null;
 
   return (
-    <div className={classNames("cls", className)}>
-      <button
-        className="cls__header"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-expanded={isOpen}
+    <Accordion.Root
+      className={classNames("cls", className)}
+      type="single"
+      collapsible
+      onValueChange={handleValueChange}
+    >
+      <Accordion.Item 
+        className="cls-item" 
+        value="item-1"
+        ref={itemRef}
       >
-        <h2 className="cls__title">{title}</h2>
-        <span className="cls__icon">{isOpen ? "−" : "+"}</span>
-      </button>
+        <Accordion.Header className="cls__header">
+          <Accordion.Trigger className="cls__trigger">
+            <h2 className="cls__title">{title}</h2>
+            <TriangleDownIcon className="cls__icon" aria-hidden />
+          </Accordion.Trigger>
+        </Accordion.Header>
 
-      {isOpen && (
-        <div className="cls__body">
-          <div className="cls__grid">
-            {entries.map(([label, href]) => (
-              <a
-                key={label}
-                href={href}
-                className="cls__link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {label}
-              </a>
-            ))}
+        <Accordion.Content className="cls__content">
+          <div className="cls__body">
+            <div className="cls__grid">
+              {entries.map(([label, href]) => (
+                <a
+                  key={label}
+                  href={href}
+                  className="cls__link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
   );
 };
 

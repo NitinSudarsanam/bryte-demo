@@ -11,35 +11,45 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 50rem;
+  max-width: 80rem;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
+  gap: 1rem;
 }
 
 .slideshow-track {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 120%;
+  gap: 1.5rem;
+  width: 100%;
   position: relative;
 }
 
 .slide {
-  border-radius: 2rem;
+  border-radius: 60px;
   object-fit: cover;
-  transition: transform 0.4s ease, opacity 0.4s ease;
+  transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+  height: 400px;
 }
 
 .main-slide {
-  width: 60%;
+  width: 600px;
   z-index: 2;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  opacity: 1;
 }
 
 .side-slide {
-  width: 60%;
-  opacity: 0.6;
-  filter: brightness(0.6);
+  width: 400px;
+  opacity: 0.5;
+  filter: brightness(0.5) grayscale(0.3);
+  transform: scale(0.9);
+}
+
+.slide.transitioning {
+  opacity: 0.3;
+  transform: scale(0.95);
 }
 
 /* Arrows */

@@ -2,6 +2,7 @@
 
 import AccordionComponent from "@/app/components/accordion";
 import Header from "@/app/components/header";
+import Masthead from "@/app/components/masthead/masthead";
 
 interface CosmicSection {
   id: string;
@@ -87,6 +88,26 @@ export default function FAQsPageClient({ cosmic }: FAQsPageClientProps) {
   return (
     <>
       <Header />
+      <Masthead
+        showLargeTitle={true}
+        showAtSymbol={false}
+        topRowPillColorClass="bryte-pill-green"
+        titleWords={["FAQ"]}
+        decorativePills={[
+          {
+            colorClass: "bryte-pill-maroon",
+            size: "long",
+            row: 0,
+            position: "left",
+          },
+          {
+            colorClass: "bryte-pill-orange",
+            size: "short",
+            row: 0,
+            position: "right",
+          },
+        ]}
+      />
       <AccordionComponent 
         title={cosmic?.metadata?.title || "FAQs"} 
         items={faqItems} 

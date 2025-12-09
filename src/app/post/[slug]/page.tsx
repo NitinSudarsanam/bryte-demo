@@ -52,7 +52,7 @@ export default function PostPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const bucketSlug = process.env.NEXT_PUBLIC_COSMIC_BUCKET;
+        const bucketSlug = process.env.NEXT_PUBLIC_COSMIC_BUCKET_SLUG;
         const readKey = process.env.NEXT_PUBLIC_COSMIC_READ_KEY;
 
         if (!bucketSlug || !readKey) {

@@ -1,7 +1,7 @@
 .parent-resources-page {
   background-color: #fefae1;
   font-family: "League Spartan", Arial, sans-serif;
-  padding: 40px 0;
+  min-height: 100vh;
 }
 
 /* Full-width inner content */
