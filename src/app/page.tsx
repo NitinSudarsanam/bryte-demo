@@ -22,3 +22,19 @@ export default async function HomePage() {
 
   return <HomePageClient cosmic={cosmic} />;
 }
+export default function HomePage() {
+  return (
+    <div>
+      <Header />
+      <Masthead
+        showAtSymbol={true}
+        topRowPillColorClass="bryte-pill-maroon"
+        subtitle="Brown Refugee Youth Tutoring & Enrichment"
+        animatedWords={["child", "family", "care"]}
+        showWholeSection={true}
+      />
+
+      <Slideshow slides={slides} />
+    </div>
+  );
+}

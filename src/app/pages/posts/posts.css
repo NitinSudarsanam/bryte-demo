@@ -1,0 +1,462 @@
+:root {
+  --forest-green: #2d4a3e;
+  --deep-orange: #b8572a;
+  --light-cream: #fefae1;
+  --dark-text: #2c2c2c;
+  --deep-gold: #f4c430;
+  --card-cream: #fce794;
+  --border-green: #3e5a4a;
+}
+
+body {
+  background-color: var(--light-cream);
+  margin: 0;
+  font-family: "League Spartan", sans-serif;
+}
+
+/* Header and Navigation */
+.posts-header {
+  background-color: #7fb069;
+  padding: 15px 0;
+  margin-bottom: 0;
+}
+
+.header-nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sunburst-logo {
+  width: 32px;
+  height: 32px;
+  color: var(--deep-orange);
+  font-size: 24px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: var(--light-cream);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--deep-gold);
+}
+
+.join-button {
+  background-color: var(--deep-gold);
+  color: var(--forest-green);
+  padding: 10px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.3s;
+}
+
+.join-button:hover {
+  transform: scale(1.05);
+}
+
+/* Main Title Section */
+.title-section {
+  background-color: var(--forest-green);
+  padding: 60px 20px;
+  text-align: center;
+  position: relative;
+}
+
+.main-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.bryte-text {
+  font-size: 4rem;
+  font-weight: 900;
+  color: var(--forest-green);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background-color: var(--light-cream);
+  padding: 0 20px;
+  border-radius: 10px;
+}
+
+.blogs-text {
+  font-size: 4rem;
+  font-weight: 900;
+  color: var(--light-cream);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.sunburst-accent {
+  font-size: 3rem;
+  color: var(--deep-orange);
+}
+
+.title-underline {
+  width: 300px;
+  height: 8px;
+  background-color: var(--deep-orange);
+  margin: 0 auto;
+  border-radius: 4px;
+}
+
+/* Main Content Container */
+.posts-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: var(--light-cream);
+}
+
+/* Search and Filtering */
+.search-section {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.avatar-section {
+  margin-bottom: 20px;
+}
+
+.avatar-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--deep-orange);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.search-container {
+  max-width: 600px;
+  margin: 0 auto 30px;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 18px 50px 18px 20px;
+  font-size: 1rem;
+  border: 2px solid var(--border-green);
+  border-radius: 50px;
+  outline: none;
+  transition: border-color 0.3s;
+  background-color: var(--light-cream);
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: var(--deep-orange);
+}
+
+.search-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--forest-green);
+  color: var(--light-cream);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.search-button:hover {
+  background: var(--deep-orange);
+}
+
+.filters-container {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.filter-select {
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 25px;
+  background: var(--forest-green);
+  color: var(--light-cream);
+  outline: none;
+  transition: background-color 0.3s;
+  min-width: 150px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.filter-select:hover {
+  background: var(--deep-orange);
+}
+
+.filter-select option {
+  background: var(--forest-green);
+  color: var(--light-cream);
+}
+
+/* Loading, Error, and No Results States */
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.1rem;
+  color: var(--forest-green);
+}
+
+.error {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.1rem;
+  color: var(--deep-orange);
+  background: var(--card-cream);
+  border-radius: 15px;
+  margin: 20px 0;
+  border: 2px solid var(--deep-orange);
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.1rem;
+  color: var(--forest-green);
+  background: var(--card-cream);
+  border-radius: 15px;
+  margin: 20px 0;
+  border: 2px solid var(--border-green);
+}
+
+/* Blog Post Cards */
+.posts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 30px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.post-card {
+  background: var(--card-cream);
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: 0 6px 20px rgba(45, 74, 62, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: 2px solid transparent;
+  overflow: hidden;
+}
+
+.post-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(45, 74, 62, 0.15);
+  border-color: var(--deep-orange);
+}
+
+.post-featured-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+}
+
+.post-card-content {
+  padding: 30px;
+}
+
+.post-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #22300d;
+  margin-bottom: 15px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.post-excerpt {
+  color: var(--dark-text);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 1rem;
+}
+
+.post-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  gap: 10px;
+}
+
+.post-meta-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.bryte-star-wrap {
+  width: var(--row-h);
+  flex-shrink: 0;
+}
+
+.bryte-star {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 4s ease-in-out;
+  transform-origin: center;
+}
+
+.post-meta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.post-author {
+  font-weight: 700;
+  color: var(--dark-text);
+}
+
+.post-date {
+  font-weight: 700;
+  color: var(--dark-text);
+}
+
+.post-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.category-tag {
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 0.8rem;
+  background-color: #964238;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.category-tag.families {
+  background-color: #8b1538;
+}
+
+.category-tag.tips {
+  background-color: #e67e22;
+}
+
+.category-tag.kids {
+  background-color: var(--forest-green);
+}
+
+.category-tag.events {
+  background-color: #9b59b6;
+}
+
+.category-tag.resources {
+  background-color: #34495e;
+}
+
+.category-tag.plus {
+  background-color: var(--forest-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-nav {
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+  }
+
+  .nav-links {
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .bryte-text,
+  .blogs-text {
+    font-size: 2.5rem;
+  }
+
+  .main-title {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .posts-container {
+    padding: 20px 15px;
+  }
+
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .filters-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filter-select {
+    min-width: 200px;
+  }
+
+  .search-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}

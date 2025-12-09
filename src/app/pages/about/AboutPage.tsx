@@ -3,6 +3,7 @@
 import AccordionComponent from "@/app/components/accordion";
 import Header from "@/app/components/header";
 import "./about.css";
+import Masthead from "@/app/components/masthead/masthead";
 
 interface CosmicSection {
   id: string;
@@ -218,14 +219,90 @@ export default function AboutPage({ cosmic, teamSection }: AboutPageProps) {
     ];
   }
 
+  // Filter out the "why bryte" section from accordion items since it will be displayed separately
+  const accordionSections = sections.filter(
+    (section) => section.slug !== "about-us-why-bryte"
+  );
+
+  const aboutItems =
+    accordionSections.length > 0
+      ? accordionSections.map((section, index) => ({
+          id: section.id || `item-${index + 1}`,
+          title: section.metadata?.header || "",
+          content: (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: section.metadata?.body_text || "",
+              }}
+            />
+          ),
+        }))
+      : fallbackItems;
+
+  // Find a section with an image for the bottom Section component (not used anymore)
+  const sectionWithImage = sections.find(
+    (section) =>
+      section.metadata?.image?.imgix_url || section.metadata?.image?.url
+  );
+
   return (
     <>
       <Header />
+      <Masthead
+        showLargeTitle={true}
+        showAtSymbol={false}
+        topRowPillColorClass="bryte-pill-green"
+        titleWords={["About us"]} // One line
+        decorativePills={[
+          {
+            colorClass: "bryte-pill-maroon",
+            size: "medium",
+            row: 0,
+            position: "left",
+          },
+          {
+            colorClass: "bryte-pill-orange",
+            size: "short",
+            row: 0,
+            position: "right",
+          },
+        ]}
+      />
 
       <AccordionComponent
         title={cosmic?.metadata?.title || "About Bryte!"}
         items={aboutItems}
       />
+
+      {valuesSection?.metadata && (
+        <Section
+          title={valuesSection.metadata.header || "Why BRYTE?"}
+          content={
+            <div
+              dangerouslySetInnerHTML={{
+                __html: valuesSection.metadata.body_text || "",
+              }}
+            />
+          }
+          image={
+            valuesSection.metadata.images?.[0]?.metadata?.image
+              ? {
+                  src:
+                    valuesSection.metadata.images[0].metadata.image.imgix_url ||
+                    valuesSection.metadata.images[0].metadata.image.url ||
+                    "",
+                  alt:
+                    valuesSection.metadata.images[0].title ||
+                    valuesSection.metadata.header ||
+                    "Our Values",
+                }
+              : undefined
+          }
+          imagePosition="right"
+          sectionBackgroundColor="var(--darkgreen)"
+          sectionTextColor="#fff"
+        />
+      )}
     </>
   );
 }
