@@ -2,6 +2,7 @@
 import AccordionComponent from "@/app/components/accordion";
 import Section from "@/app/components/section/section";
 import Header from "@/app/components/header";
+import Masthead from "@/app/components/masthead/masthead";
 
 export default function FAQsPage() {
   const faqItems = [
@@ -51,6 +52,26 @@ export default function FAQsPage() {
   return (
     <>
       <Header />
+      <Masthead
+        showLargeTitle={true}
+        showAtSymbol={false}
+        topRowPillColorClass="bryte-pill-green"
+        titleWords={["FAQ"]}
+        decorativePills={[
+          {
+            colorClass: "bryte-pill-maroon",
+            size: "long",
+            row: 0,
+            position: "left",
+          },
+          {
+            colorClass: "bryte-pill-orange",
+            size: "short",
+            row: 0,
+            position: "right",
+          },
+        ]}
+      />
       <AccordionComponent title="FAQs" items={faqItems} />
     </>
   );
