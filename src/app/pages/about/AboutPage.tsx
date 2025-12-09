@@ -269,7 +269,6 @@ export default function AboutPage({ cosmic, teamSection, valuesSection }: AboutP
       />
 
       <AccordionComponent
-        title={cosmic?.metadata?.title || "About Bryte!"}
         items={aboutItems}
       />
 

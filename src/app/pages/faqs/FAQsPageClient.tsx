@@ -109,7 +109,6 @@ export default function FAQsPageClient({ cosmic }: FAQsPageClientProps) {
         ]}
       />
       <AccordionComponent 
-        title={cosmic?.metadata?.title || "FAQs"} 
         items={faqItems} 
       />
     </>
