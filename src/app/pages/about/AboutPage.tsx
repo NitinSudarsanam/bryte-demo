@@ -1,8 +1,8 @@
 "use client";
 
 import AccordionComponent from "@/app/components/accordion";
-import Section from "@/app/components/section/section";
 import Header from "@/app/components/header";
+import "./about.css";
 import Masthead from "@/app/components/masthead/masthead";
 
 interface CosmicSection {
@@ -24,28 +24,57 @@ interface CosmicData {
   };
 }
 
-interface ValuesSectionData {
+interface Person {
+  id: string;
+  title: string;
+  metadata: {
+    full_description: string;
+    photo?: {
+      url?: string;
+      imgix_url?: string;
+    };
+  };
+}
+
+interface TeamSection {
   metadata?: {
     header?: string;
-    body_text?: string;
-    images?: Array<{
-      metadata?: {
-        image?: {
-          imgix_url?: string;
-          url?: string;
-        };
-      };
-      title?: string;
-    }>;
+    people?: Person[];
   };
 }
 
 interface AboutPageProps {
   cosmic: CosmicData | null;
-  valuesSection: ValuesSectionData | null;
+  valuesSection: null;
+  teamSection: TeamSection | null;
 }
 
-export default function AboutPage({ cosmic, valuesSection }: AboutPageProps) {
+// Helper function to parse full_description
+function parsePersonDetails(fullDescription: string) {
+  const lines = fullDescription.split("\n");
+  const details: {
+    class?: string;
+    concentration?: string;
+    hometown?: string;
+    role?: string;
+  } = {};
+
+  lines.forEach((line) => {
+    if (line.startsWith("Class:")) {
+      details.class = line.replace("Class:", "").trim();
+    } else if (line.startsWith("Concentration:")) {
+      details.concentration = line.replace("Concentration:", "").trim();
+    } else if (line.startsWith("Home:")) {
+      details.hometown = line.replace("Home:", "").trim();
+    } else if (line.startsWith("Leadership Role:")) {
+      details.role = line.replace("Leadership Role:", "").trim();
+    }
+  });
+
+  return details;
+}
+
+export default function AboutPage({ cosmic, teamSection }: AboutPageProps) {
   // Fallback content if Cosmic data is not available
   const fallbackItems = [
     {
@@ -119,6 +148,76 @@ export default function AboutPage({ cosmic, valuesSection }: AboutPageProps) {
 
   // Map Cosmic sections → your accordion format (or use fallback)
   const sections = cosmic?.metadata?.sections || [];
+  
+  let aboutItems = sections.length > 0
+    ? sections.map((section, index) => ({
+        id: section.id || `item-${index + 1}`,
+        title: section.metadata?.header || "",
+        content: (
+          <div
+            dangerouslySetInnerHTML={{ __html: section.metadata?.body_text || "" }}
+          />
+        ),
+      }))
+    : fallbackItems;
+
+  // Add team section as an accordion item if team members exist
+  const teamMembers = teamSection?.metadata?.people || [];
+  if (teamMembers.length > 0) {
+    aboutItems = [
+      ...aboutItems,
+      {
+        id: "our-team",
+        title: teamSection?.metadata?.header || "Our Team",
+        content: (
+          <div className="team-accordion-content">
+            <div className="team-grid">
+              {teamMembers.map((person) => {
+                const details = parsePersonDetails(person.metadata?.full_description || "");
+                const photoUrl = person.metadata?.photo?.imgix_url || person.metadata?.photo?.url;
+                
+                return (
+                  <div key={person.id} className="team-card">
+                    <div className="team-card-header">
+                      <h3 className="team-member-name">{person.title}</h3>
+                      {details.role && (
+                        <p className="team-member-role">{details.role}</p>
+                      )}
+                    </div>
+                    
+                    <div className="team-card-image-container">
+                      {photoUrl ? (
+                        <img
+                          src={photoUrl}
+                          alt={person.title}
+                          className="team-member-photo"
+                        />
+                      ) : (
+                        <div className="team-member-photo-placeholder" />
+                      )}
+                      <div className="team-card-starburst" />
+                    </div>
+                    
+                    <div className="team-card-details">
+                      {details.class && (
+                        <p className="team-detail">Class: {details.class}</p>
+                      )}
+                      {details.concentration && (
+                        <p className="team-detail">Concentration: {details.concentration}</p>
+                      )}
+                      {details.hometown && (
+                        <p className="team-detail">Hometown: {details.hometown}</p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ),
+      },
+    ];
+  }
 
   // Filter out the "why bryte" section from accordion items since it will be displayed separately
   const accordionSections = sections.filter(
