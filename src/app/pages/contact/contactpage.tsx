@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import * as Toast from "@radix-ui/react-toast";
 import Header from "@/app/components/header";
 
 export default function ContactPage() {
@@ -11,13 +10,12 @@ export default function ContactPage() {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [toastOpen, setToastOpen] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastType, setToastType] = useState<"success" | "error">("success");
+  const [isSent, setIsSent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsSubmitting(true);
+    setIsSent(false);
 
     try {
       const res = await fetch("/api/contact", {
@@ -27,22 +25,14 @@ export default function ContactPage() {
       });
 
       if (res.ok) {
-        setToastMessage("Message sent successfully!");
-        setToastType("success");
-        setToastOpen(true);
+        setIsSent(true);
         setName("");
         setEmail("");
         setMessage("");
         setIsDialogOpen(false);
-      } else {
-        setToastMessage("Error sending message. Please try again.");
-        setToastType("error");
-        setToastOpen(true);
       }
     } catch (err) {
-      setToastMessage("Error sending message. Please try again.");
-      setToastType("error");
-      setToastOpen(true);
+      // Error handling - could show error state if needed
     } finally {
       setIsSubmitting(false);
     }
@@ -52,9 +42,9 @@ export default function ContactPage() {
     <div>
       <Header />
       <div style={{ minHeight: '100vh', padding: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ maxWidth: '500px', width: '100%' }}>
+        <div style={{ maxWidth: '600px', width: '100%' }}>
         <div style={{
-          background: 'var(--background)',
+          background: 'var(--darkgreen)',
           borderRadius: '6px',
           padding: '22px',
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
@@ -63,14 +53,14 @@ export default function ContactPage() {
             <h1 style={{
               fontSize: '24px',
               fontWeight: '500',
-              color: 'var(--violet-12)',
+              color: 'var(--mauve-3)',
               marginBottom: '8px',
               lineHeight: '1.2'
             }}>
               Contact Us
             </h1>
             <p style={{
-              color: 'var(--mauve-11)',
+              color: 'var(--mauve-3)',
               lineHeight: '1.4'
             }}>
               We'd love to hear from you!
@@ -82,7 +72,7 @@ export default function ContactPage() {
               <label htmlFor="name" style={{
                 display: 'block',
                 fontWeight: '500',
-                color: 'var(--violet-12)',
+                color: 'var(--mauve-3)',
                 marginBottom: '8px',
                 lineHeight: '1.2',
                 fontSize: '15px'
@@ -123,7 +113,7 @@ export default function ContactPage() {
               <label htmlFor="email" style={{
                 display: 'block',
                 fontWeight: '500',
-                color: 'var(--violet-12)',
+                color: 'var(--mauve-3)',
                 marginBottom: '8px',
                 lineHeight: '1.2',
                 fontSize: '15px'
@@ -164,7 +154,7 @@ export default function ContactPage() {
               <label htmlFor="message" style={{
                 display: 'block',
                 fontWeight: '500',
-                color: 'var(--violet-12)',
+                color: 'var(--mauve-3)',
                 marginBottom: '8px',
                 lineHeight: '1.2',
                 fontSize: '15px'
@@ -205,7 +195,7 @@ export default function ContactPage() {
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isSent}
               style={{
                 width: '100%',
                 padding: '12px',
@@ -214,7 +204,7 @@ export default function ContactPage() {
                 lineHeight: '1',
                 fontWeight: '500',
                 border: 'none',
-                cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                cursor: (isSubmitting || isSent) ? 'not-allowed' : 'pointer',
                 background: isSubmitting ? 'var(--mauve-9)' : '#FCE794',
                 color: '#6E7E4A',
                 transition: 'background-color 0.2s, opacity 0.2s',
@@ -222,12 +212,12 @@ export default function ContactPage() {
                 textAlign: 'center'
               }}
               onMouseEnter={(e) => {
-                if (!isSubmitting) {
+                if (!isSubmitting && !isSent) {
                   e.currentTarget.style.opacity = '0.9';
                 }
               }}
               onMouseLeave={(e) => {
-                if (!isSubmitting) {
+                if (!isSubmitting && !isSent) {
                   e.currentTarget.style.opacity = '1';
                 }
               }}
@@ -240,6 +230,8 @@ export default function ContactPage() {
                   </svg>
                   Sending...
                 </span>
+              ) : isSent ? (
+                "Message Sent!"
               ) : (
                 "Send Message"
               )}
@@ -247,40 +239,6 @@ export default function ContactPage() {
           </form>
         </div>
       </div>
-
-      {/* Toast for notifications */}
-      <Toast.Provider swipeDirection="right">
-        <Toast.Root
-          open={toastOpen}
-          onOpenChange={setToastOpen}
-          style={{
-            position: 'fixed',
-            top: '22px',
-            right: '22px',
-            zIndex: 50,
-            padding: '12px 22px',
-            borderRadius: '6px',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)',
-            maxWidth: '300px',
-            background: toastType === "success" ? 'var(--indigo-9)' : 'var(--purple-9)',
-            color: 'white'
-          }}
-        >
-          <Toast.Title style={{ fontWeight: '500', fontSize: '15px' }}>{toastMessage}</Toast.Title>
-          <Toast.Close style={{
-            position: 'absolute',
-            top: '8px',
-            right: '8px',
-            color: 'white',
-            cursor: 'pointer',
-            fontSize: '18px',
-            lineHeight: '1'
-          }}>
-            ×
-          </Toast.Close>
-        </Toast.Root>
-        <Toast.Viewport style={{ position: 'fixed', top: 0, right: 0, zIndex: 50, padding: '22px' }} />
-      </Toast.Provider>
       </div>
     </div>
   );
