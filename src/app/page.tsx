@@ -17,7 +17,14 @@ export default function HomePage() {
   return (
     <div>
       <Header />
-      <Masthead />
+      <Masthead
+        showAtSymbol={true}
+        topRowPillColorClass="bryte-pill-maroon"
+        subtitle="Brown Refugee Youth Tutoring & Enrichment"
+        animatedWords={["child", "family", "care"]}
+        showWholeSection={true}
+      />
+
       <Slideshow slides={slides} />
     </div>
   );
