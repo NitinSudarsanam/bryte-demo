@@ -1,6 +1,6 @@
 .contact-page {
   background-color: #fefae1;
-  font-family: "League Spartan", Arial, sans-serif;
+  font-family: var(--font-league-spartan), Arial, sans-serif;
   min-height: 100vh;
 }
 
@@ -73,7 +73,7 @@
   outline: none;
   background-color: #fefae1;
   color: #22300d;
-  font-family: "League Spartan", Arial, sans-serif;
+  font-family: var(--font-league-spartan), Arial, sans-serif;
   box-sizing: border-box;
   transition: border-color 0.2s, background-color 0.2s;
 }
@@ -108,7 +108,7 @@
   transition: background-color 0.2s, opacity 0.2s, transform 0.1s;
   box-sizing: border-box;
   text-align: center;
-  font-family: "League Spartan", Arial, sans-serif;
+  font-family: var(--font-league-spartan), Arial, sans-serif;
 }
 
 .submit-button:hover:not(:disabled) {

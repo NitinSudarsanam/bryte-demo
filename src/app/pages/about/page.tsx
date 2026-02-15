@@ -1,4 +1,4 @@
-import { fetchCosmicObject } from "@/app/lib/cosmic";
+import { fetchCosmicObject, fetchCosmicObjects } from "@/app/lib/cosmic";
 import AboutPage from "./AboutPage";
 
 export default async function Page() {
@@ -13,31 +13,63 @@ export default async function Page() {
       props: "slug,title,metadata,type",
       depth: 2,
     });
-    console.log("Cosmic about data:", JSON.stringify(cosmic, null, 2));
   } catch (error) {
-    console.error("Error fetching about:", error);
+    if (process.env.NODE_ENV === "development") {
+      console.log("About page not found in Cosmic CMS, using fallback data", error);
+    }
     // If the about object doesn't exist in Cosmic, use fallback data
     cosmic = null;
   }
 
   // Fetch "about-us-our-team" section from Cosmic
   let teamSection;
+  let teamMembers = [];
+  
   try {
     teamSection = await fetchCosmicObject({
-      bucketSlug: "basic-template-production",
-      readKey: "38hX2h4NgRq5t6btJvbkjxJygVsfD9jN5eX9TG9sV8BYPEHw8f",
+      bucketSlug: process.env.COSMIC_BUCKET_SLUG!,
+      readKey: process.env.COSMIC_READ_KEY!,
       type: "sections",
       slug: "about-us-our-team",
       props: "slug,title,metadata,type",
-      depth: 1,
+      depth: 2,
     });
-    console.log("Cosmic team section data:", JSON.stringify(teamSection, null, 2));
+    
+    teamMembers = teamSection?.metadata?.people || [];
+    
+    // If we got fewer than expected or no team members, try fetching them directly
+    if (teamMembers.length < 5) { // Assuming you have more than 4-5 team members
+      const directTeamMembers = await fetchCosmicObjects({
+        bucketSlug: process.env.COSMIC_BUCKET_SLUG!,
+        readKey: process.env.COSMIC_READ_KEY!,
+        type: "people", // or whatever type your team members are
+        props: "slug,title,metadata,type",
+        depth: 1,
+        limit: 100,
+      });
+      
+      if (directTeamMembers && directTeamMembers.length > teamMembers.length) {
+        teamMembers = directTeamMembers;
+      }
+    }
   } catch (error) {
-    console.error("Error fetching team section:", error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error fetching team section:", error);
+    }
     teamSection = null;
+    teamMembers = [];
   }
 
-  return <AboutPage cosmic={cosmic} valuesSection={null} teamSection={teamSection} />;
+  // Create a modified team section with all team members
+  const enhancedTeamSection = teamSection ? {
+    ...teamSection,
+    metadata: {
+      ...teamSection.metadata,
+      people: teamMembers
+    }
+  } : null;
+
+  return <AboutPage cosmic={cosmic} valuesSection={null} teamSection={enhancedTeamSection} />;
 }
 
 // "use client";

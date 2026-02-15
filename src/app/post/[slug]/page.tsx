@@ -52,37 +52,26 @@ export default function PostPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const bucketSlug = process.env.NEXT_PUBLIC_COSMIC_BUCKET_SLUG;
-        const readKey = process.env.NEXT_PUBLIC_COSMIC_READ_KEY;
+        const response = await fetch(`/api/posts/${encodeURIComponent(slug)}`);
 
-        if (!bucketSlug || !readKey) {
-          throw new Error("Missing CosmicJS configuration");
+        if (response.status === 404) {
+          setPost(null);
+          setError("Post not found");
+          return;
         }
 
-        // First, get all posts to find the one with matching slug
-        const allPostsResponse = await fetch(
-          `https://api.cosmicjs.com/v3/buckets/${bucketSlug}/objects?pretty=true&read_key=${readKey}&depth=1&props=id,slug,title,metadata,type`
-        );
-
-        if (!allPostsResponse.ok) {
-          throw new Error(`Failed to fetch posts (${allPostsResponse.status})`);
+        if (!response.ok) {
+          throw new Error("Failed to load post");
         }
 
-        const allPostsData = await allPostsResponse.json();
-
-        // Find the post with matching slug and type "posts"
-        const foundPost = allPostsData.objects.find(
-          (obj: any) => obj.slug === slug && obj.type === "posts"
-        );
-
-        if (!foundPost) {
-          throw new Error("Post not found");
-        }
-
+        const foundPost = await response.json();
         setPost(foundPost);
+        setError(null);
       } catch (error) {
-        console.error("Fetch error:", error);
-        setError((error as Error).message);
+        if (process.env.NODE_ENV === "development") {
+          console.error("Fetch error:", error);
+        }
+        setError("Failed to load post");
       } finally {
         setLoading(false);
       }
@@ -105,7 +94,7 @@ export default function PostPage() {
     return (
       <div style={{ padding: "40px", textAlign: "center" }}>
         <h1>Post not found</h1>
-        <p>{error}</p>
+        <p>{error || "This post could not be loaded."}</p>
         <Link href="/pages/posts" style={{ color: "#3b82f6" }}>
           ← Back to all posts
         </Link>

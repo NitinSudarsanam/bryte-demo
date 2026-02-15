@@ -58,13 +58,12 @@ export async function GET() {
     });
 
     return NextResponse.json({ sections });
-  } catch (error: any) {
-    console.error("COSMIC tutor-resources error:", error);
+  } catch (error: unknown) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("COSMIC tutor-resources error:", error);
+    }
     return NextResponse.json(
-      {
-        error: "Failed to fetch tutor resources",
-        detail: error?.message,
-      },
+      { error: "Failed to fetch tutor resources" },
       { status: 500 }
     );
   }

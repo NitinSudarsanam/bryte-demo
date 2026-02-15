@@ -9,7 +9,7 @@
   color: #fff;
   max-width: 1200px;
   margin: 30px auto;
-  font-family: "League Spartan", sans-serif;
+  font-family: var(--font-league-spartan), sans-serif;
 }
 
 /* Text content section */

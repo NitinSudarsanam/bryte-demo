@@ -13,9 +13,10 @@ export default async function HomePage() {
       props: "slug,title,metadata,type",
       depth: 2,
     });
-    console.log("Cosmic home page data:", JSON.stringify(cosmic, null, 2));
   } catch (error) {
-    console.error("Error fetching home page:", error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error fetching home page:", error);
+    }
     // If the home page doesn't exist in Cosmic, use fallback data
     cosmic = null;
   }

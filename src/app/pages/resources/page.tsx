@@ -12,28 +12,69 @@ type TutorSection = {
   links: LinksDict;
 };
 
-function extractHref(htmlString: string): string | null {
+// Helper: Extract anchor text from HTML link
+function extractAnchorText(htmlString: string): string | null {
   if (!htmlString) return null;
-  const match = htmlString.match(/href="([^"]+)"/);
-  return match ? match[1] : null;
+  const match = htmlString.match(/<a[^>]*>([^<]+)<\/a>/i);
+  return match ? match[1].trim() : null;
 }
 
-function extractLinks(htmlString: string): LinksDict {
-  if (!htmlString) return {};
+// Helper: Decode HTML entities
+function decodeHTMLEntities(text: string): string {
+  const entities: Record<string, string> = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&#39;': "'",
+    '&nbsp;': ' ',
+    '&ndash;': '–',
+    '&mdash;': '—',
+    '&copy;': '©',
+    '&reg;': '®',
+    '&trade;': '™',
+  };
   
-  const links: LinksDict = {};
-  const linkRegex = /<a[^>]*href="([^"]+)"[^>]*>([^<]+)<\/a>/gi;
-  let match;
+  // Replace named entities
+  let decoded = text.replace(/&[a-z]+;/gi, (entity) => entities[entity.toLowerCase()] || entity);
   
-  while ((match = linkRegex.exec(htmlString)) !== null) {
-    const url = match[1];
-    const title = match[2].trim();
-    if (title && url) {
-      links[title] = url;
-    }
-  }
+  // Replace numeric entities (&#160; etc)
+  decoded = decoded.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(parseInt(dec, 10)));
   
-  return links;
+  // Replace hex entities (&#x00A0; etc)
+  decoded = decoded.replace(/&#x([0-9a-f]+);/gi, (match, hex) => String.fromCharCode(parseInt(hex, 16)));
+  
+  return decoded;
+}
+
+// Helper: Clean and normalize title text
+function cleanTitle(title: string): string {
+  // First decode HTML entities (like &nbsp;)
+  let cleaned = decodeHTMLEntities(title);
+  
+  // Normalize Unicode to standard form (converts fancy spaces, etc)
+  cleaned = cleaned.normalize('NFKC');
+  
+  // Replace various Unicode whitespace characters with regular space
+  cleaned = cleaned.replace(/[\u00A0\u200B\u2002\u2003\u2009\u202F\uFEFF]/g, ' ');
+  
+  // Normalize multiple spaces to single space and trim
+  cleaned = cleaned.replace(/\s+/g, ' ').trim();
+  
+  return cleaned;
+}
+
+// Helper: Validate if title is actually visible text
+function isValidTitle(title: string): boolean {
+  if (!title || title.length < 2) return false;
+  
+  // Check for whitespace-only (including Unicode whitespace)
+  if (/^[\s\u00A0\u200B\u2002\u2003\u2009\u202F\uFEFF]*$/.test(title)) return false;
+  
+  // Check for only special characters
+  if (/^[\W_]*$/.test(title)) return false;
+  
+  return true;
 }
 
 export default async function ResourcesPage() {
@@ -63,16 +104,32 @@ export default async function ResourcesPage() {
       const metadata = parentData.object.metadata;
       
       if (metadata.links && Array.isArray(metadata.links)) {
-        parentLinks = metadata.links.reduce((acc: LinksDict, linkObj: any) => {
-          const title = linkObj.metadata?.title || linkObj.title;
-          const linkHtml = linkObj.metadata?.link;
+        parentLinks = metadata.links.reduce((acc: LinksDict, linkObj: any, index: number) => {
+          const rawTitle = linkObj.title || '';
+          const rawLinkHTML = linkObj.metadata?.link || '';
           
-          if (title && linkHtml) {
-            const href = extractHref(linkHtml);
-            if (href) {
-              acc[title] = href;
+          // Extract URL from HTML
+          let url = null;
+          if (rawLinkHTML) {
+            const match = rawLinkHTML.match(/href\s*=\s*["']([^"']+)["']/);
+            url = match ? match[1].trim() : null;
+          }
+          
+          // Try to get title from object, fallback to HTML anchor text
+          let linkTitle = cleanTitle(rawTitle);
+          
+          if (!isValidTitle(linkTitle) && rawLinkHTML) {
+            const anchorText = extractAnchorText(rawLinkHTML);
+            if (anchorText) {
+              linkTitle = cleanTitle(anchorText);
             }
           }
+          
+          const isValidUrl = url && url.trim() && url !== '#' && !/^[\s\u00A0\u200B]*$/.test(url);
+          if (isValidTitle(linkTitle) && isValidUrl) {
+            acc[linkTitle] = url;
+          }
+          
           return acc;
         }, {});
       }
@@ -80,29 +137,55 @@ export default async function ResourcesPage() {
 
     // Fetch tutor resources
     const tutorData = await cosmic.objects
-      .findOne({
-        type: "sections",
-        slug: "resources-for-tutors",
+      .find({
+        type: "tutor-resources",
       })
       .props("slug,title,metadata")
       .depth(1);
 
-    if (tutorData?.object?.metadata?.tutor_resources) {
-      const tutorResources = tutorData.object.metadata.tutor_resources;
+    const tutorObjects = (tutorData as any).objects || [];
+
+    tutorSections = tutorObjects.map((obj: any) => {
+      const linksArray = obj.metadata?.links || [];
+      const links: LinksDict = {};
       
-      tutorSections = tutorResources.map((resource: any) => {
-        const metadata = resource.metadata || {};
-        const info = metadata.info || "";
+      linksArray.forEach((linkObj: any, index: number) => {
+        const rawTitle = linkObj.title || '';
+        const rawLinkHTML = linkObj.metadata?.link || '';
         
-        return {
-          slug: resource.slug,
-          title: resource.title,
-          links: extractLinks(info),
-        };
+        // Extract URL from HTML
+        let url = null;
+        if (rawLinkHTML) {
+          const match = rawLinkHTML.match(/href\s*=\s*["']([^"']+)["']/);
+          url = match ? match[1].trim() : null;
+        }
+        
+        // Try to get title from object, fallback to HTML anchor text
+        let linkTitle = cleanTitle(rawTitle);
+        
+        if (!isValidTitle(linkTitle) && rawLinkHTML) {
+          const anchorText = extractAnchorText(rawLinkHTML);
+          if (anchorText) {
+            linkTitle = cleanTitle(anchorText);
+          }
+        }
+        
+        const isValidUrl = url && url.trim() && url !== '#' && !/^[\s\u00A0\u200B]*$/.test(url);
+        if (isValidTitle(linkTitle) && isValidUrl) {
+          links[linkTitle] = url;
+        }
       });
-    }
+      
+      return {
+        slug: obj.slug,
+        title: obj.title,
+        links: links,
+      };
+    });
   } catch (e) {
-    console.error("Failed to load resources:", e);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Failed to load resources:", e);
+    }
     error = "Unable to load resources at this time.";
   }
 

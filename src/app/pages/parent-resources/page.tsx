@@ -70,7 +70,9 @@ export default async function ResourcesForBryteParentsPage() {
         }, {} as LinksDict);
     }
   } catch (e) {
-    console.error("Failed to load parent resources:", e);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Failed to load parent resources:", e);
+    }
     error = "Unable to load parent resources at this time.";
   }
 

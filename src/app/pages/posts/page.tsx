@@ -50,25 +50,14 @@ export default function PostsPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bucketSlug = process.env.NEXT_PUBLIC_COSMIC_BUCKET_SLUG || 
-                           process.env.NEXT_PUBLIC_COSMIC_BUCKET;
-        const readKey = process.env.NEXT_PUBLIC_COSMIC_READ_KEY;
-
-        if (!bucketSlug || !readKey) {
-          throw new Error("Missing CosmicJS configuration");
-        }
-
-        const response = await fetch(
-          `https://api.cosmicjs.com/v3/buckets/${bucketSlug}/objects?pretty=true&read_key=${readKey}&depth=1&props=id,slug,title,metadata,type,created_at`
-        );
+        const response = await fetch("/api/posts");
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error("Failed to load posts");
         }
 
         const data = await response.json();
-        const posts =
-          data.objects?.filter((obj: any) => obj.type === "posts") || [];
+        const posts = data.objects || [];
 
         // Extract categories and authors
         const allCategories = new Set<string>();
@@ -95,8 +84,10 @@ export default function PostsPage() {
         setPosts(posts);
         setFilteredPosts(posts);
       } catch (error) {
-        console.error("Fetch error:", error);
-        setError((error as Error).message);
+        if (process.env.NODE_ENV === "development") {
+          console.error("Fetch error:", error);
+        }
+        setError("Failed to load posts");
       } finally {
         setLoading(false);
       }
@@ -181,7 +172,7 @@ export default function PostsPage() {
   }, [selectedCategory, selectedAuthor]);
 
   if (loading) return <div className="loading">Loading posts...</div>;
-  if (error) return <div className="error">Error: {error}</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div>

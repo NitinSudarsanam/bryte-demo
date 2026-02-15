@@ -1,7 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=League+Spartan:opsz,wght@auto,400..800&display=swap");
-
+/* League Spartan via layout.tsx (--font-league-spartan) */
 .league-spartan-text {
-  font-family: "League Spartan", sans-serif;
+  font-family: var(--font-league-spartan), sans-serif;
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
@@ -23,7 +22,7 @@
   flex-direction: column;
   row-gap: 0.4rem;
   box-sizing: border-box;
-  font-family: "League Spartan", sans-serif;
+  font-family: var(--font-league-spartan), sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
   font-weight: 600;
@@ -94,11 +93,11 @@
   padding: 0;
 }
 
-/* Updated: Title text matches wordmark exactly */
+/* Updated: Title text matches wordmark – bold for “BRYTE FAQ” style */
 .bryte-title-text {
   font-size: 4rem;
   line-height: 1;
-  font-weight: 600;
+  font-weight: 700;
   color: #fdf8dd;
   white-space: nowrap;
   margin: 0;

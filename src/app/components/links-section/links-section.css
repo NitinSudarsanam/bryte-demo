@@ -10,7 +10,7 @@ h3 {
   background-color: #fefae1;
   width: 100%;
   box-sizing: border-box;
-  font-family: "League Spartan", Arial, sans-serif;
+  font-family: var(--font-league-spartan), Arial, sans-serif;
 }
 
 .cls-item {
@@ -135,6 +135,32 @@ h3 {
 
 .cls__link:hover {
   color: #7a2e28;
+}
+
+/* Hide empty or whitespace-only links */
+.cls__link:empty,
+.cls__link[href=""],
+.cls__link[href="#"] {
+  display: none !important;
+}
+
+/* Additional safeguard: hide links with only whitespace content */
+.cls__link {
+  white-space: pre-wrap; /* Preserve meaningful whitespace */
+}
+
+.cls__link:not(:hover):not(:focus) {
+  /* If link renders as nearly invisible, hide it */
+  min-width: 2ch; /* Must be at least 2 characters wide */
+}
+
+/* No links message */
+.cls__no-links {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+  margin: 0;
 }
 
 /* Responsive */

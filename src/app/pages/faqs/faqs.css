@@ -7,7 +7,7 @@ h3 {
 .faqs-container {
   background-color: #fefae1;
   align-items: center;
-  font-family: "League Spartan", sans-serif;
+  font-family: var(--font-league-spartan), sans-serif;
 }
 
 .faqs-title {
@@ -23,6 +23,7 @@ h3 {
   gap: 12px;
   border-radius: 25px;
   padding: 20px;
+  font-family: var(--font-league-spartan), sans-serif;
 }
 
 .AccordionItem {
@@ -57,7 +58,7 @@ h3 {
 }
 
 .AccordionTrigger {
-  font-family: inherit;
+  font-family: var(--font-league-spartan), sans-serif;
   background-color: #fce794;
   padding: 0 20px;
   height: 45px;
@@ -78,6 +79,7 @@ h3 {
 .AccordionContent {
   overflow: hidden;
   font-size: 20px;
+  font-family: var(--font-league-spartan), sans-serif;
   background-color: #fce794;
 }
 

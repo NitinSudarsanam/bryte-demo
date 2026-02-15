@@ -52,13 +52,12 @@ export async function GET() {
     });
 
     return NextResponse.json({ links });
-  } catch (error: any) {
-    console.error("COSMIC parent-resources error:", error);
+  } catch (error: unknown) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("COSMIC parent-resources error:", error);
+    }
     return NextResponse.json(
-      {
-        error: "Failed to fetch parent resources",
-        detail: error?.message,
-      },
+      { error: "Failed to fetch parent resources" },
       { status: 500 }
     );
   }

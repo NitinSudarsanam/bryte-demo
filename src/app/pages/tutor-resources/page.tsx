@@ -12,22 +12,38 @@ type TutorSection = {
   links: LinksDict;
 };
 
-function extractLinks(htmlString: string): LinksDict {
-  if (!htmlString) return {};
+// Helper: Extract anchor text from HTML link
+function extractAnchorText(htmlString: string): string | null {
+  if (!htmlString) return null;
+  const match = htmlString.match(/<a[^>]*>([^<]+)<\/a>/i);
+  return match ? match[1].trim() : null;
+}
+
+// Helper: Clean and normalize title text
+function cleanTitle(title: string): string {
+  // Normalize Unicode to standard form (converts fancy spaces, etc)
+  let cleaned = title.normalize('NFKC');
   
-  const links: LinksDict = {};
-  const linkRegex = /<a[^>]*href="([^"]+)"[^>]*>([^<]+)<\/a>/gi;
-  let match;
+  // Replace various Unicode whitespace characters with regular space
+  cleaned = cleaned.replace(/[\u00A0\u200B\u2002\u2003\u2009\u202F\uFEFF]/g, ' ');
   
-  while ((match = linkRegex.exec(htmlString)) !== null) {
-    const url = match[1];
-    const title = match[2].trim();
-    if (title && url) {
-      links[title] = url;
-    }
-  }
+  // Normalize multiple spaces to single space and trim
+  cleaned = cleaned.replace(/\s+/g, ' ').trim();
   
-  return links;
+  return cleaned;
+}
+
+// Helper: Validate if title is actually visible text
+function isValidTitle(title: string): boolean {
+  if (!title || title.length < 2) return false;
+  
+  // Check for whitespace-only (including Unicode whitespace)
+  if (/^[\s\u00A0\u200B\u2002\u2003\u2009\u202F\uFEFF]*$/.test(title)) return false;
+  
+  // Check for only special characters
+  if (/^[\W_]*$/.test(title)) return false;
+  
+  return true;
 }
 
 export default async function ResourcesForBryteTutorsPage() {
@@ -35,6 +51,7 @@ export default async function ResourcesForBryteTutorsPage() {
   let error: string | null = null;
 
   try {
+    // Server-side: Use Cosmic client directly (fetch won't work on server)
     const bucketSlug = process.env.COSMIC_BUCKET_SLUG!;
     const readKey = process.env.COSMIC_READ_KEY!;
 
@@ -44,31 +61,55 @@ export default async function ResourcesForBryteTutorsPage() {
     });
 
     const data = await cosmic.objects
-      .findOne({
-        type: "sections",
-        slug: "resources-for-tutors",
+      .find({
+        type: "tutor-resources",
       })
       .props("slug,title,metadata")
       .depth(1);
 
-    if (!data?.object?.metadata?.tutor_resources) {
-      throw new Error("No tutor resources data returned from Cosmic");
-    }
+    const objects = (data as any).objects || [];
 
-    const tutorResources = data.object.metadata.tutor_resources;
-    
-    sections = tutorResources.map((resource: any) => {
-      const metadata = resource.metadata || {};
-      const info = metadata.info || "";
+    sections = objects.map((obj: any) => {
+      const linksArray = obj.metadata?.links || [];
+      const links: LinksDict = {};
+      
+      linksArray.forEach((linkObj: any, index: number) => {
+        const rawTitle = linkObj.title || '';
+        const rawLinkHTML = linkObj.metadata?.link || '';
+        
+        // Extract URL from HTML
+        let url = null;
+        if (rawLinkHTML) {
+          const match = rawLinkHTML.match(/href\s*=\s*["']([^"']+)["']/);
+          url = match ? match[1].trim() : null;
+        }
+        
+        // Try to get title from object, fallback to HTML anchor text
+        let linkTitle = cleanTitle(rawTitle);
+        
+        if (!isValidTitle(linkTitle) && rawLinkHTML) {
+          const anchorText = extractAnchorText(rawLinkHTML);
+          if (anchorText) {
+            linkTitle = cleanTitle(anchorText);
+          }
+        }
+        
+        const isValidUrl = url && url.trim() && url !== '#' && !/^[\s\u00A0\u200B]*$/.test(url);
+        if (isValidTitle(linkTitle) && isValidUrl) {
+          links[linkTitle] = url;
+        }
+      });
       
       return {
-        slug: resource.slug,
-        title: resource.title,
-        links: extractLinks(info),
+        slug: obj.slug,
+        title: obj.title,
+        links: links,
       };
     });
   } catch (e) {
-    console.error("Failed to load tutor resources:", e);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Failed to load tutor resources:", e);
+    }
     error = "Unable to load tutor resources at this time.";
   }
 

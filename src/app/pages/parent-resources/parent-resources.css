@@ -1,6 +1,6 @@
 .parent-resources-page {
   background-color: #fefae1;
-  font-family: "League Spartan", Arial, sans-serif;
+  font-family: var(--font-league-spartan), Arial, sans-serif;
   min-height: 100vh;
 }
 

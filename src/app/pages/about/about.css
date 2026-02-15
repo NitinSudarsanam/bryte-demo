@@ -7,7 +7,7 @@ h3 {
 .about-us-container {
   background-color: #fefae1;
   align-items: center;
-  font-family: "League Spartan", sans-serif;
+  font-family: var(--font-league-spartan), sans-serif;
 }
 .about-us-title {
   color: #22300d;
@@ -39,17 +39,19 @@ h3 {
 }
 
 .team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
-  justify-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .team-card {
   background-color: #fefae1;
   border-radius: 2rem;
   padding: 1.5rem;
-  width: 100%;
+  flex: 0 0 calc((100% - 4rem) / 3);
   max-width: 350px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -79,7 +81,7 @@ h3 {
 .team-card-image-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
+  height: 280px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,6 +92,7 @@ h3 {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   border-radius: 1rem;
 }
 

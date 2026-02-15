@@ -29,9 +29,16 @@ export default function ContactPage() {
         setName("");
         setEmail("");
         setMessage("");
+        
+        // Reset the success state after 3 seconds
+        setTimeout(() => {
+          setIsSent(false);
+        }, 3000);
       }
     } catch (err) {
-      console.error("Error sending message:", err);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error sending message:", err);
+      }
     } finally {
       setIsSubmitting(false);
     }

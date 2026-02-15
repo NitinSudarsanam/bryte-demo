@@ -1,5 +1,6 @@
 "use client";
 
+import DOMPurify from "isomorphic-dompurify";
 import Masthead from "@/app/components/masthead/masthead";
 import Header from "@/app/components/header";
 import Section from "@/app/components/section/section";
@@ -109,7 +110,7 @@ export default function HomePageClient({ cosmic }: HomePageClientProps) {
             content={
               <div
                 dangerouslySetInnerHTML={{
-                  __html: whatsBryteSection.metadata.body_text || "",
+                  __html: DOMPurify.sanitize(whatsBryteSection.metadata.body_text || ""),
                 }}
               />
             }
@@ -181,7 +182,7 @@ export default function HomePageClient({ cosmic }: HomePageClientProps) {
           content={
             <div
               dangerouslySetInnerHTML={{
-                __html: homeWhyBryteSection.metadata.body_text || "",
+                __html: DOMPurify.sanitize(homeWhyBryteSection.metadata.body_text || ""),
               }}
             />
           }

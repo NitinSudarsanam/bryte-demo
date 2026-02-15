@@ -1,5 +1,6 @@
 "use client";
 
+import DOMPurify from "isomorphic-dompurify";
 import AccordionComponent from "@/app/components/accordion";
 import Header from "@/app/components/header";
 import Masthead from "@/app/components/masthead/masthead";
@@ -79,7 +80,9 @@ export default function FAQsPageClient({ cosmic }: FAQsPageClientProps) {
         title: section.metadata?.header || "",
         content: (
           <div
-            dangerouslySetInnerHTML={{ __html: section.metadata?.body_text || "" }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(section.metadata?.body_text || ""),
+            }}
           />
         ),
       }))

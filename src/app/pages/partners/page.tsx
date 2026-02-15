@@ -28,7 +28,9 @@ export default async function UpartnersPage() {
       depth: 2,
     });
   } catch (error) {
-    console.error("Error fetching home page for slideshow:", error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error fetching home page for slideshow:", error);
+    }
     cosmic = null;
   }
 

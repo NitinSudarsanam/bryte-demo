@@ -1,5 +1,6 @@
 "use client";
 
+import DOMPurify from "isomorphic-dompurify";
 import AccordionComponent from "@/app/components/accordion";
 import Header from "@/app/components/header";
 import Section from "@/app/components/section/section";
@@ -179,32 +180,35 @@ export default function AboutPage({ cosmic, teamSection, valuesSection }: AboutP
           content: (
             <div
               dangerouslySetInnerHTML={{
-                __html: section.metadata?.body_text || "",
+                __html: DOMPurify.sanitize(section.metadata?.body_text || ""),
               }}
             />
           ),
         }))
       : fallbackItems;
 
-  // Add team section as an accordion item if team members exist
+  // Add Team section as an accordion item if Team members exist
   const teamMembers = teamSection?.metadata?.people || [];
   if (teamMembers.length > 0) {
     aboutItems = [
       ...aboutItems,
       {
         id: "our-team",
-        title: teamSection?.metadata?.header || "Our Team",
+        title: "Our Team",
         content: (
           <div className="team-accordion-content">
             <div className="team-grid">
-              {teamMembers.map((person) => {
+              {[...teamMembers].reverse().map((person, index) => {
                 const details = parsePersonDetails(person.metadata?.full_description || "");
                 const photoUrl = person.metadata?.photo?.imgix_url || person.metadata?.photo?.url;
                 
                 return (
-                  <div key={person.id} className="team-card">
+                  <div key={person.id || `team-member-${index}`} className="team-card">
                     <div className="team-card-header">
-                      <h3 className="team-member-name">{person.title}</h3>
+                      <h3 className="team-member-name">
+                        {person.title}
+                        <br />
+                      </h3>
                       {details.role && (
                         <p className="team-member-role">{details.role}</p>
                       )}
@@ -278,7 +282,7 @@ export default function AboutPage({ cosmic, teamSection, valuesSection }: AboutP
           content={
             <div
               dangerouslySetInnerHTML={{
-                __html: valuesSection.metadata.body_text || "",
+                __html: DOMPurify.sanitize(valuesSection.metadata.body_text || ""),
               }}
             />
           }

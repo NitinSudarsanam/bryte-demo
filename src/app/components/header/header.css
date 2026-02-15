@@ -15,30 +15,31 @@ p {
 
 .NavigationMenuList {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
   background-color: #6e7e4a;
-  padding: 20px;
+  padding: 8px 20px;
   width: 100vw;
   box-sizing: border-box;
   border-radius: 6px;
   list-style: none;
   box-shadow: 0 2px 10px var(--black-a7);
   margin: 0;
+  gap: 0.5vw;
 }
 
 .JoinUsButton {
   background-color: #fce794;
   color: #6e7e4a;
   font-weight: bold;
-  padding: 8px 3vw;
+  padding: 8px 3.5vw;
   outline: none;
   user-select: none;
   font-weight: 500;
   line-height: 1;
   border-radius: 20px;
-  font-size: 15px;
-  font-family: "League Spartan";
-  margin-left: auto;
+  font-size: 17px;
+  font-family: var(--font-league-spartan);
 }
 
 .JoinUsButton:hover {
@@ -47,15 +48,16 @@ p {
 
 .NavigationMenuTrigger,
 .NavigationMenuLink {
-  padding: 8px 5vw;
+  padding: 6px 0.8vw;
   outline: none;
   user-select: none;
   font-weight: 500;
   line-height: 1;
   border-radius: 4px;
-  font-size: 15px;
+  font-size: 17px;
   color: #fefae1;
-  font-family: "League Spartan";
+  font-family: var(--font-league-spartan);
+  white-space: nowrap;
 }
 
 .NavigationMenuTrigger:focus,
@@ -71,10 +73,16 @@ p {
 }
 
 .NavigationMenuLink {
-  display: block;
+  display: flex;
+  align-items: center;
   text-decoration: none;
   font-size: 15px;
   line-height: 1;
+}
+
+.LogoLink {
+  padding: 8px 1vw 8px 2vw;
+  margin-right: 1vw;
 }
 
 .NavigationMenuContent {

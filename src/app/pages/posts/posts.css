@@ -10,7 +10,7 @@
 body {
   background-color: var(--light-cream);
   margin: 0;
-  font-family: "League Spartan", sans-serif;
+  font-family: var(--font-league-spartan), sans-serif;
 }
 
 /* Header and Navigation */
@@ -173,7 +173,7 @@ body {
   transition: border-color 0.3s;
   background-color: white;
   box-sizing: border-box;
-  font-family: "League Spartan", sans-serif;
+  font-family: var(--font-league-spartan), sans-serif;
   color: var(--dark-text);
 }
 
@@ -232,7 +232,7 @@ body {
   min-width: 150px;
   cursor: pointer;
   font-weight: 600;
-  font-family: "League Spartan", sans-serif;
+  font-family: var(--font-league-spartan), sans-serif;
 }
 
 .filter-select:hover {

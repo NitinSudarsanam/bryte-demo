@@ -7,7 +7,7 @@ h3 {
 .accordion-container {
   background-color: #fefae1;
   align-items: center;
-  font-family: "League Spartan", Arial, sans-serif;
+  font-family: var(--font-league-spartan), Arial, sans-serif;
   padding: 40px 0;
   display: flex;
   flex-direction: column;
@@ -49,7 +49,7 @@ h3 {
 }
 
 .AccordionTrigger {
-  font-family: inherit;
+  font-family: var(--font-league-spartan), sans-serif;
   background-color: #fce794;
   padding: 0 20px;
   height: 100%;
@@ -58,7 +58,7 @@ h3 {
   align-items: center;
   justify-content: space-between;
   font-size: 40px;
-  font-weight: 510;
+  font-weight: 500;
   line-height: 1;
   background-color: #fce794;
 }
@@ -70,6 +70,7 @@ h3 {
 .AccordionContent {
   overflow: hidden;
   font-size: 20px;
+  font-family: var(--font-league-spartan), sans-serif;
   background-color: #fce794;
 }
 

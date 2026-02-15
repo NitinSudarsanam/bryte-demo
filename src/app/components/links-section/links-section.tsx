@@ -57,16 +57,20 @@ const CollapsibleLinkSection: React.FC<CollapsibleLinkSectionProps> = ({
             <div className="cls__grid">
               {entries.map(([label, href]) => (
                 <a
-                  key={label}
+                  key={`${label}-${href}`}
                   href={href}
                   className="cls__link"
                   target="_blank"
                   rel="noopener noreferrer"
+                  title={label}
                 >
                   {label}
                 </a>
               ))}
             </div>
+            {entries.length === 0 && (
+              <p className="cls__no-links">No links available.</p>
+            )}
           </div>
         </Accordion.Content>
       </Accordion.Item>
