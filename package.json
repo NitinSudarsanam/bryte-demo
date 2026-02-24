@@ -21,7 +21,7 @@
     "classnames": "^2.5.1",
     "fitty": "^2.4.2",
     "isomorphic-dompurify": "^3.0.0-rc.2",
-    "next": "15.5.4",
+    "next": "^16.1.6",
     "nodemailer": "^7.0.10",
     "radix-ui": "^1.4.3",
     "react": "19.1.0",
