@@ -69,6 +69,15 @@ const Header: React.FC = () => {
             </NavigationMenu.Item>
 
             <NavigationMenu.Item>
+              <NavigationMenu.Link
+                className="NavigationMenuLink"
+                href="/pages/posts"
+              >
+                Posts
+              </NavigationMenu.Link>
+            </NavigationMenu.Item>
+
+            <NavigationMenu.Item>
               <NavigationMenu.Link className="JoinUsButton" href="/pages/contact">
                 Join Us!
               </NavigationMenu.Link>

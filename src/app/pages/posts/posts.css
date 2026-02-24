@@ -165,29 +165,32 @@ body {
 
 .search-input {
   width: 100%;
-  padding: 18px 60px 18px 50px;
+  padding: 18px 60px 18px 30px;
   font-size: 1.1rem;
   border: 3px solid var(--border-green);
   border-radius: 50px;
   outline: none;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
   background-color: white;
   box-sizing: border-box;
   font-family: var(--font-league-spartan), sans-serif;
   color: var(--dark-text);
+  line-height: 1.5;
+  vertical-align: middle;
 }
 
-.search-input::before {
-  content: "🔍";
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px;
+.search-input::placeholder {
+  color: #999;
+  opacity: 1;
 }
 
 .search-input:focus {
   border-color: var(--deep-maroon);
+  box-shadow: 0 0 0 3px rgba(150, 66, 56, 0.15);
+}
+
+.search-input:hover {
+  border-color: #5a6b3b;
 }
 
 .search-button {
@@ -205,11 +208,18 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  transition: color 0.3s;
+  transition: color 0.3s, transform 0.2s;
+  border-radius: 50%;
 }
 
 .search-button:hover {
   color: var(--deep-maroon);
+  background: rgba(150, 66, 56, 0.1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.search-button:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
 .filters-container {
@@ -218,31 +228,79 @@ body {
   justify-content: center;
   margin-bottom: 20px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
 }
 
 .filter-select {
-  padding: 14px 24px;
+  padding: 14px 40px 14px 24px;
   font-size: 1rem;
   border: none;
   border-radius: 30px;
   background: #22300d;
   color: white;
   outline: none;
-  transition: background-color 0.3s, transform 0.2s;
-  min-width: 150px;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+  min-width: 200px;
   cursor: pointer;
   font-weight: 600;
   font-family: var(--font-league-spartan), sans-serif;
+  line-height: 1.5;
+  vertical-align: middle;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  box-shadow: 0 2px 8px rgba(34, 48, 13, 0.15);
+  background-size: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .filter-select:hover {
-  background: var(--deep-maroon);
+  background-color: var(--deep-maroon);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 12px;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 48, 13, 0.25);
+}
+
+.filter-select:focus {
+  background-color: var(--deep-maroon);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 3L11 8H1z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 12px;
+  box-shadow: 0 0 0 3px rgba(150, 66, 56, 0.3);
+  transform: translateY(-1px);
+}
+
+.filter-select:active {
+  transform: translateY(0);
 }
 
 .filter-select option {
-  background: #22300d;
+  background: white;
+  color: #22300d;
+  padding: 12px;
+  font-family: var(--font-league-spartan), sans-serif;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.filter-select option:hover {
+  background: #fce794;
+  color: #22300d;
+}
+
+.filter-select option:checked {
+  background: var(--deep-maroon);
   color: white;
+  font-weight: 600;
 }
 
 /* Loading, Error, and No Results States */
@@ -492,4 +550,20 @@ body {
   .search-input {
     font-size: 16px; /* Prevents zoom on iOS */
   }
+}
+
+/* Smooth animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter-select option {
+  animation: fadeIn 0.2s ease;
 }

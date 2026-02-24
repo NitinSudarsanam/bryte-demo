@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Header from "../../components/header/header";
-import MastheadPosts from "../../components/masthead/mastheadPosts";
+import Masthead from "../../components/masthead/masthead";
 import "./posts.css";
 
 interface Post {
@@ -180,7 +180,26 @@ export default function PostsPage() {
       <Header />
 
       {/* Masthead */}
-      <MastheadPosts />
+      <Masthead
+        showLargeTitle={true}
+        showAtSymbol={false}
+        topRowPillColorClass="bryte-pill-green"
+        titleWords={["Blogs"]}
+        decorativePills={[
+          {
+            colorClass: "bryte-pill-maroon",
+            size: "short",
+            row: 0,
+            position: "left",
+          },
+          {
+            colorClass: "bryte-pill-orange",
+            size: "long",
+            row: 0,
+            position: "right",
+          },
+        ]}
+      />
 
       {/* Main Content */}
       <div className="posts-container">
