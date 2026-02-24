@@ -17,9 +17,26 @@ export default async function HomePage() {
     if (process.env.NODE_ENV === "development") {
       console.error("Error fetching home page:", error);
     }
-    // If the home page doesn't exist in Cosmic, use fallback data
     cosmic = null;
   }
 
-  return <HomePageClient cosmic={cosmic} />;
+  // Fetch "home-stats" section from Cosmic (stats/factoid block)
+  let homeStatsSection;
+  try {
+    homeStatsSection = await fetchCosmicObject({
+      bucketSlug: process.env.COSMIC_BUCKET_SLUG!,
+      readKey: process.env.COSMIC_READ_KEY!,
+      type: "sections",
+      slug: "home-stats",
+      props: "slug,title,metadata,type",
+      depth: 1,
+    });
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error fetching home-stats section:", error);
+    }
+    homeStatsSection = null;
+  }
+
+  return <HomePageClient cosmic={cosmic} homeStatsSection={homeStatsSection} />;
 }

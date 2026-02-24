@@ -10,6 +10,16 @@
   --background: #fefae1;
   --foreground: #171717;
   --darkgreen: #22300d;
+  /* Navigation (desktop + mobile) */
+  --breakpoint-mobile: 768px;
+  --nav-bg: #6e7e4a;
+  --nav-text: #fefae1;
+  --nav-cta-bg: #fce794;
+  --nav-cta-text: #6e7e4a;
+  --nav-cta-hover: #e4ce79;
+  --nav-drawer-width: 280px;
+  --nav-transition-duration: 300ms;
+  --nav-transition-easing: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 @theme inline {

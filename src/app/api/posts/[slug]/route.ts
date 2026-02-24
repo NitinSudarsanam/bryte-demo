@@ -32,10 +32,9 @@ export async function GET(
       .props("id,slug,title,metadata,type,created_at")
       .depth(1);
 
-    const objects = (data as { objects?: unknown[] }).objects || [];
+    const objects = (data as { objects?: { slug?: string; type?: string }[] }).objects || [];
     const post = objects.find(
-      (obj: { slug?: string; type?: string }) =>
-        obj.slug === slug && obj.type === "posts"
+      (obj) => obj.slug === slug && obj.type === "posts"
     );
 
     if (!post) {

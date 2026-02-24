@@ -9,7 +9,7 @@ export default async function Page() {
       bucketSlug: process.env.COSMIC_BUCKET_SLUG!,
       readKey: process.env.COSMIC_READ_KEY!,
       type: "pages",
-      slug: "about-page",
+      slug: "about-us",
       props: "slug,title,metadata,type",
       depth: 2,
     });

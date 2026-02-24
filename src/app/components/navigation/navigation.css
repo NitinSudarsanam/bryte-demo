@@ -1,0 +1,25 @@
+/* Desktop: show at >= 769px */
+.NavigationDesktop {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .NavigationDesktop {
+    display: block;
+  }
+
+  .NavigationMobile {
+    display: none !important;
+  }
+}
+
+/* Mobile: show at <= 768px */
+.NavigationMobile {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .NavigationDesktop {
+    display: none !important;
+  }
+}

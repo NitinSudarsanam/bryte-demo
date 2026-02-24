@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Header from "@/app/components/header";
 import Masthead from "@/app/components/masthead/masthead";
 import "./contact.css";
 
@@ -46,7 +45,6 @@ export default function ContactPage() {
 
   return (
     <div className="contact-page">
-      <Header />
       <Masthead
         showLargeTitle={true}
         showAtSymbol={false}

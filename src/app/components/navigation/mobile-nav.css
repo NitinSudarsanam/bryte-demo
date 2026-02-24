@@ -1,0 +1,190 @@
+.MobileNavRoot {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.MobileNavBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--nav-bg, #6e7e4a);
+  padding: 8px 20px;
+  padding-top: max(8px, env(safe-area-inset-top));
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  min-height: 56px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 10px var(--black-a7);
+}
+
+.MobileNavBarLogo {
+  display: flex;
+  align-items: center;
+  outline: none;
+}
+
+.MobileNavBarLogo:focus {
+  box-shadow: 0 0 0 2px var(--violet-7);
+  border-radius: 4px;
+}
+
+.MobileNavTrigger {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--nav-text, #fefae1);
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.MobileNavTrigger:hover {
+  background-color: rgba(254, 250, 225, 0.1);
+}
+
+.MobileNavTrigger:focus {
+  box-shadow: 0 0 0 2px var(--violet-7);
+}
+
+/* Overlay */
+.MobileNavOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  animation: MobileNavOverlayIn var(--nav-transition-duration) var(--nav-transition-easing) forwards;
+}
+
+.MobileNavOverlay[data-state="closed"] {
+  animation: MobileNavOverlayOut var(--nav-transition-duration) var(--nav-transition-easing) forwards;
+}
+
+@keyframes MobileNavOverlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes MobileNavOverlayOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .MobileNavOverlay,
+  .MobileNavOverlay[data-state="closed"] {
+    animation: none;
+  }
+  .MobileNavOverlay[data-state="open"] {
+    opacity: 1;
+  }
+  .MobileNavOverlay[data-state="closed"] {
+    opacity: 0;
+  }
+}
+
+/* Drawer panel (opens from the right) */
+.MobileNavDrawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--nav-drawer-width, 280px);
+  max-width: 85vw;
+  background-color: var(--nav-bg, #6e7e4a);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  z-index: 101;
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-left: 20px;
+  box-sizing: border-box;
+  outline: none;
+  transform: translateX(100%);
+  animation: MobileNavDrawerIn var(--nav-transition-duration) var(--nav-transition-easing) forwards;
+}
+
+.MobileNavDrawer[data-state="closed"] {
+  animation: MobileNavDrawerOut var(--nav-transition-duration) var(--nav-transition-easing) forwards;
+}
+
+@keyframes MobileNavDrawerIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes MobileNavDrawerOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .MobileNavDrawer,
+  .MobileNavDrawer[data-state="closed"] {
+    animation: none;
+  }
+  .MobileNavDrawer[data-state="open"] {
+    transform: translateX(0);
+  }
+  .MobileNavDrawer[data-state="closed"] {
+    transform: translateX(100%);
+  }
+}
+
+.MobileNavDrawerTitle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.MobileNavClose {
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  left: 16px;
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--nav-text, #fefae1);
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.MobileNavClose:hover {
+  background-color: rgba(254, 250, 225, 0.1);
+}
+
+.MobileNavClose:focus {
+  box-shadow: 0 0 0 2px var(--violet-7);
+}
+
+.MobileNavDrawerNav {
+  padding: 60px 0 24px;
+  overflow-y: auto;
+  max-height: calc(100vh - 84px);
+}

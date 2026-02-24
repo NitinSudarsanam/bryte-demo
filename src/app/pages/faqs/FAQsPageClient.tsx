@@ -2,7 +2,6 @@
 
 import DOMPurify from "isomorphic-dompurify";
 import AccordionComponent from "@/app/components/accordion";
-import Header from "@/app/components/header";
 import Masthead from "@/app/components/masthead/masthead";
 
 interface CosmicSection {
@@ -90,7 +89,6 @@ export default function FAQsPageClient({ cosmic }: FAQsPageClientProps) {
 
   return (
     <>
-      <Header />
       <Masthead
         showLargeTitle={true}
         showAtSymbol={false}

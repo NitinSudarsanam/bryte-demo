@@ -1,0 +1,128 @@
+/* Home stats / factoid section - mobile-first */
+.HomeStats {
+  padding: 2rem 1.25rem 2.5rem;
+  background: var(--background, #fefae1);
+  font-family: var(--font-league-spartan), Arial, Helvetica, sans-serif;
+}
+
+.HomeStats__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.HomeStats__item {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  min-height: 0;
+}
+
+.HomeStats__value {
+  flex-shrink: 0;
+  font-size: clamp(3.5rem, 18vw, 8rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--darkgreen, #1e2b0f);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.HomeStats__bubble {
+  flex: 1;
+  min-width: 0;
+  padding: 1rem 1.25rem;
+  border-radius: 2rem;
+  font-size: clamp(0.95rem, 4vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.35;
+  color: #fff;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Default bubble colors (overridden by inline style from CMS) */
+.HomeStats__bubble--maroon {
+  background-color: #963e3b;
+}
+
+.HomeStats__bubble--orange {
+  background-color: #e48d3c;
+}
+
+/* Tablet */
+@media (min-width: 600px) {
+  .HomeStats {
+    padding: 2.5rem 2rem 3rem;
+  }
+
+  .HomeStats__item {
+    gap: 1.5rem;
+  }
+
+  .HomeStats__bubble {
+    padding: 1.25rem 1.5rem;
+    border-radius: 2.5rem;
+  }
+}
+
+/* Desktop: left-aligned numbers, pill bubbles, proper vertical alignment */
+@media (min-width: 769px) {
+  .HomeStats {
+    padding: 3.5rem 3rem 4.5rem;
+    background: var(--background, #fefae1);
+  }
+
+  .HomeStats__list {
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .HomeStats__item {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    min-height: 6rem;
+  }
+
+  .HomeStats__value {
+    font-size: clamp(5rem, 7vw, 9rem);
+    font-weight: 700;
+    line-height: 1;
+    color: #2e4726;
+    letter-spacing: -0.02em;
+    text-align: left;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-width: fit-content;
+  }
+
+  .HomeStats__bubble {
+    flex: 1;
+    min-width: 0;
+    padding: 1.75rem 3rem;
+    border-radius: 4rem;
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    font-weight: 400;
+    line-height: 1.4;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+}

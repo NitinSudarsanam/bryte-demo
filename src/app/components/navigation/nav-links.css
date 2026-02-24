@@ -1,0 +1,76 @@
+.NavLinksList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+}
+
+.NavLinksList--vertical {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+
+.NavLink {
+  display: flex;
+  align-items: center;
+  padding: 6px 0.8vw;
+  outline: none;
+  user-select: none;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 4px;
+  font-size: 15px;
+  color: var(--nav-text, #fefae1);
+  font-family: var(--font-league-spartan);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.NavLink:focus {
+  box-shadow: 0 0 0 2px var(--violet-7);
+}
+
+.NavLink--logo {
+  padding: 8px 1vw 8px 2vw;
+  margin-right: 1vw;
+}
+
+.NavLink--cta {
+  background-color: var(--nav-cta-bg, #fce794);
+  color: var(--nav-cta-text, #6e7e4a);
+  padding: 8px 3.5vw;
+  border-radius: 20px;
+  font-size: 17px;
+}
+
+.NavLink--cta:hover {
+  background-color: var(--nav-cta-hover, #e4ce79);
+}
+
+/* Vertical (mobile drawer) overrides */
+.NavLinksList--vertical .NavLink {
+  padding: 14px 20px;
+  font-size: 18px;
+  white-space: normal;
+  border-radius: 6px;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+.NavLinksList--vertical .NavLink--logo {
+  padding: 16px 20px;
+  margin-right: 0;
+  justify-content: center;
+}
+
+.NavLinksList--vertical .NavLink--cta {
+  margin: 8px 20px 0;
+  justify-content: center;
+}
+
+.NavLink--active:not(.NavLink--cta) {
+  background-color: rgba(254, 250, 225, 0.15);
+}

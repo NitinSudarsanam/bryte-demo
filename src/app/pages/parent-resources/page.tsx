@@ -1,5 +1,4 @@
 import { createBucketClient } from "@cosmicjs/sdk";
-import Header from "@/app/components/header";
 import CollapsibleLinkSection from "@/app/components/links-section/links-section";
 import "./parent-resources.css";
 import Masthead from "@/app/components/masthead/masthead";
@@ -78,7 +77,6 @@ export default async function ResourcesForBryteParentsPage() {
 
   return (
     <div className="parent-resources-page">
-      <Header />
       <Masthead
         showLargeTitle={true}
         showAtSymbol={false}

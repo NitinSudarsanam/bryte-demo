@@ -17,7 +17,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #6e7e4a;
+  background-color: var(--nav-bg, #6e7e4a);
   padding: 8px 20px;
   width: 100vw;
   box-sizing: border-box;
@@ -29,8 +29,8 @@ p {
 }
 
 .JoinUsButton {
-  background-color: #fce794;
-  color: #6e7e4a;
+  background-color: var(--nav-cta-bg, #fce794);
+  color: var(--nav-cta-text, #6e7e4a);
   font-weight: bold;
   padding: 8px 3.5vw;
   outline: none;
@@ -43,7 +43,7 @@ p {
 }
 
 .JoinUsButton:hover {
-  background-color: #e4ce79;
+  background-color: var(--nav-cta-hover, #e4ce79);
 }
 
 .NavigationMenuTrigger,
@@ -55,7 +55,7 @@ p {
   line-height: 1;
   border-radius: 4px;
   font-size: 17px;
-  color: #fefae1;
+  color: var(--nav-text, #fefae1);
   font-family: var(--font-league-spartan);
   white-space: nowrap;
 }
@@ -161,5 +161,11 @@ p {
 @media only screen and (min-width: 600px) {
   .NavigationMenuViewport {
     width: var(--radix-navigation-menu-viewport-width);
+  }
+}
+
+@media (max-width: 768px) {
+  .NavigationMenuRoot {
+    display: none;
   }
 }

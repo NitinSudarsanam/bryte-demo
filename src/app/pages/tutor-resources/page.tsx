@@ -1,5 +1,4 @@
 import { createBucketClient } from "@cosmicjs/sdk";
-import Header from "@/app/components/header";
 import Masthead from "@/app/components/masthead/masthead";
 import CollapsibleLinkSection from "@/app/components/links-section/links-section";
 import "./tutor-resources.css";
@@ -115,7 +114,6 @@ export default async function ResourcesForBryteTutorsPage() {
 
   return (
     <div className="tutor-resources-page">
-      <Header />
       <Masthead
         showLargeTitle={true}
         showAtSymbol={false}

@@ -2,7 +2,6 @@
 
 import DOMPurify from "isomorphic-dompurify";
 import AccordionComponent from "@/app/components/accordion";
-import Header from "@/app/components/header";
 import Section from "@/app/components/section/section";
 import "./about.css";
 import Masthead from "@/app/components/masthead/masthead";
@@ -250,7 +249,6 @@ export default function AboutPage({ cosmic, teamSection, valuesSection }: AboutP
 
   return (
     <>
-      <Header />
       <Masthead
         showLargeTitle={true}
         showAtSymbol={false}

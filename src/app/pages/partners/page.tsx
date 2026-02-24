@@ -1,4 +1,3 @@
-import Header from "@/app/components/header";
 import Masthead from "@/app/components/masthead/masthead";
 import Slideshow from "@/app/components/slideshow";
 import Section from "@/app/components/section/section";
@@ -114,7 +113,6 @@ export default async function UpartnersPage() {
 
   return (
     <div>
-      <Header />
       <Masthead
         showLargeTitle={true}
         showAtSymbol={false}

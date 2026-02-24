@@ -1,5 +1,4 @@
 import { createBucketClient } from "@cosmicjs/sdk";
-import Header from "@/app/components/header";
 import Masthead from "@/app/components/masthead/masthead";
 import CollapsibleLinkSection from "@/app/components/links-section/links-section";
 import "./resources.css";
@@ -191,7 +190,6 @@ export default async function ResourcesPage() {
 
   return (
     <div className="resources-page">
-      <Header />
       <Masthead
         showLargeTitle={true}
         showAtSymbol={false}
