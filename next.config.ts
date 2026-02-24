@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
               // Next.js/Webpack dev uses eval() for source maps and HMR; allow only in development
               process.env.NODE_ENV === "development"
                 ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'"
-                : "script-src 'self'",
+                : "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com",
               "img-src 'self' data: https: blob: https://cdn.cosmicjs.com https://imgix.cosmicjs.com",
               "font-src 'self' data: https://fonts.gstatic.com https://*.gstatic.com",
