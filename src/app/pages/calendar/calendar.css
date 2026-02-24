@@ -1,3 +1,15 @@
+@media (max-width: 600px) {
+  .calendar-container {
+    border-radius: 20px;
+    border-width: 2.5px;
+  }
+  .calendar-container-container {
+    padding: 8px;
+  }
+  .calendar-style {
+    border-radius: 0;
+  }
+}
 @import "tailwindcss";
 
 

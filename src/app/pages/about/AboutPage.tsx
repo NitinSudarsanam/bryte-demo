@@ -253,7 +253,7 @@ export default function AboutPage({ cosmic, teamSection, valuesSection }: AboutP
         showLargeTitle={true}
         showAtSymbol={false}
         topRowPillColorClass="bryte-pill-green"
-        titleWords={["About us"]}
+        titleWords={["About Us"]}
         decorativePills={[
           {
             colorClass: "bryte-pill-maroon",

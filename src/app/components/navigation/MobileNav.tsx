@@ -40,7 +40,8 @@ const MobileNav: React.FC = () => {
   return (
     <div className="MobileNavRoot">
       <header className="MobileNavBar">
-        <Link href="/" className="MobileNavBarLogo" aria-label="BRYTE Home">
+        <Link href="/" className="MobileNavBarBrand" aria-label="BRYTE Home">
+          <span className="MobileNavBarText">BRYTE</span>
           <LogoIcon />
         </Link>
         <Dialog.Root open={open} onOpenChange={handleOpenChange} modal>

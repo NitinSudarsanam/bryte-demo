@@ -1,3 +1,9 @@
+/* Ensure both header lines have the same width */
+.bryte-title-section {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
 /* League Spartan via layout.tsx (--font-league-spartan) */
 .league-spartan-text {
   font-family: var(--font-league-spartan), sans-serif;
@@ -68,6 +74,9 @@
   gap: 0.4rem;
   height: var(--row-h);
   width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 0.4rem;
 }
 

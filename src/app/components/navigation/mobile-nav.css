@@ -1,3 +1,29 @@
+/* Brand: BRYTE text with logo on the right */
+.MobileNavBarBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--nav-text, #fefae1);
+  font-family: var(--font-league-spartan), Arial, sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  outline: none;
+}
+
+.MobileNavBarBrand:focus {
+  box-shadow: 0 0 0 2px var(--violet-7);
+  border-radius: 4px;
+}
+
+.MobileNavBarText {
+  display: inline-block;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--nav-text, #fefae1);
+  margin-right: 0.25rem;
+}
 .MobileNavRoot {
   position: sticky;
   top: 0;
@@ -187,4 +213,7 @@
   padding: 60px 0 24px;
   overflow-y: auto;
   max-height: calc(100vh - 84px);
+  z-index: 102;
+  position: relative;
+  pointer-events: auto;
 }
