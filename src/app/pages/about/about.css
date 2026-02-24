@@ -11,8 +11,10 @@ h3 {
 }
 .about-us-title {
   color: #22300d;
-  font-size: 75px;
+  font-size: clamp(2rem, 10vw, 75px);
   text-align: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 @keyframes slideDown {
@@ -134,14 +136,56 @@ h3 {
 
 @media (max-width: 768px) {
   .team-grid {
-    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .team-card {
+    flex: 0 0 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 1.25rem 1rem;
+    min-height: 320px;
+    gap: 0.75rem;
+  }
+
+  .team-card-image-container {
+    height: 220px;
+    min-height: 180px;
+    margin: 0.25rem 0;
+  }
+
+  .team-member-name {
+    font-size: 1.35rem;
+    line-height: 1.25;
+  }
+
+  .team-member-role {
+    font-size: 0.95rem;
+  }
+
+  .team-detail {
+    font-size: 0.85rem;
   }
   
   .our-team-title {
     font-size: 2rem;
   }
-  
+}
+
+@media (max-width: 480px) {
+  .team-card {
+    padding: 1rem 0.75rem;
+    min-height: 280px;
+    gap: 0.65rem;
+  }
+
+  .team-card-image-container {
+    height: 200px;
+    min-height: 160px;
+  }
+
   .team-member-name {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 }

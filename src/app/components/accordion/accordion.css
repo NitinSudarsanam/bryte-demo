@@ -52,11 +52,13 @@ h3 {
   font-family: var(--font-league-spartan), sans-serif;
   background-color: #fce794;
   padding: 0 20px;
-  height: 100%;
+  min-height: 48px;
   flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   font-size: 40px;
   font-weight: 500;
   line-height: 1;
@@ -88,8 +90,11 @@ h3 {
 
 .AccordionTriangle {
   color: #9b3c35;
-  width: 55px;
-  height: 55px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  flex-shrink: 0;
   transition: transform 300ms cubic-bezier(0.87, 0, 0.13, 1);
   stroke: #9b3c35;
   stroke-width: 1px;
@@ -101,6 +106,21 @@ h3 {
 
 .AccordionTrigger[data-state="open"] > .AccordionTriangle {
   transform: rotate(180deg) scaleY(0.8);
+}
+
+@media (max-width: 768px) {
+  .AccordionTrigger {
+    padding: 0 12px;
+    min-height: 44px;
+    font-size: 1.125rem;
+  }
+
+  .AccordionTriangle {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+  }
 }
 
 .email-link {

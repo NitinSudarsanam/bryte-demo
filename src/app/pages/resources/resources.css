@@ -18,10 +18,12 @@
 
 .section-heading {
   color: #22300d;
-  font-size: 48px;
+  font-size: clamp(1.75rem, 8vw, 48px);
   font-weight: 700;
   text-align: center;
   margin-bottom: 32px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .error-message {

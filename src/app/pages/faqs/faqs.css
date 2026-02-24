@@ -12,18 +12,24 @@ h3 {
 
 .faqs-title {
   color: #22300d;
-  font-size: 75px;
+  font-size: clamp(2rem, 10vw, 75px);
   text-align: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .AccordionRoot {
   border-radius: 6px;
-  width: 1000px;
+  width: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
   background-color: #fefae1;
   gap: 12px;
   border-radius: 25px;
   padding: 20px;
   font-family: var(--font-league-spartan), sans-serif;
+  box-sizing: border-box;
 }
 
 .AccordionItem {
@@ -61,14 +67,15 @@ h3 {
   font-family: var(--font-league-spartan), sans-serif;
   background-color: #fce794;
   padding: 0 20px;
-  height: 45px;
+  min-height: 45px;
   flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 40px;
+  font-size: clamp(1.125rem, 4vw, 40px);
   font-weight: 500;
-  line-height: 1;
+  line-height: 1.2;
   background-color: #fce794;
 }
 
@@ -95,14 +102,45 @@ h3 {
   padding: 15px 20px;
 }
 
-.AccordionChevron {
+@media (max-width: 768px) {
+  .faqs-container {
+    padding: 0 0.5rem;
+  }
+
+  .AccordionRoot {
+    padding: 12px;
+  }
+
+  .AccordionTrigger {
+    padding: 0 12px;
+    font-size: 1.125rem;
+  }
+
+  .AccordionContentText {
+    padding: 12px 16px;
+    font-size: 1rem;
+  }
+
+  .AccordionTriangle {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+  }
+}
+
+/* Match shared accordion icon (same as accordion.css / links-section) */
+.AccordionTriangle {
   color: #9b3c35;
   width: 40px;
   height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  flex-shrink: 0;
   transition: transform 300ms cubic-bezier(0.87, 0, 0.13, 1);
 }
 
-.AccordionTrigger[data-state="open"] > .AccordionChevron {
+.AccordionTrigger[data-state="open"] > .AccordionTriangle {
   transform: rotate(180deg);
 }
 
